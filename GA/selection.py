@@ -23,7 +23,8 @@ class RouletWheel(ISelection):
         newPopulation = list()
         for i, cand in enumerate(population):
             fitMap[cumFit]=cand
-            cumFit+=cand.cost
+            # Max biggest fitness smalles, because we minimize
+            cumFit+=1/cand.cost
         for i in range(len(population)):
             rnd = random.uniform(0, cumFit)
             index = fitMap.bisect(rnd)-1

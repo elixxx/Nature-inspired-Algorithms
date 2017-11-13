@@ -57,42 +57,47 @@ class Makespan(GA.ICandidate):
 
     @property
     def cost(self):
+        if self._cost is not None:
+            return self._cost
         cost = [0]*self._m
         for jobID, machine in enumerate(self._solution):
             cost[machine]+=self._jobTimes[jobID]
-        return 1/max(cost)
+        self._cost = max(cost)
+        return self._cost
+
+    @property
+    def solution(self):
+        self._cost = None
+        return self._solution
 
 class randomMutation(GA.IMutation):
 
 
-    def __init__(self):
-        pass
+    def __init__(self, pb):
+        super().__init__(pb)
 
-    def call(self, candidate: Makespan, pb :float) -> Makespan:
-        new_cand = copy.deepcopy(candidate)
-        for i, prop in enumerate(new_cand._solution):
-            if random.random() < pb:
-                new_cand._solution[i] = random.choice(list(range(new_cand._m)))
-        return new_cand
+    def call(self, candidate: Makespan):
+        for i, prop in enumerate(candidate.solution):
+            if random.random() < self._pb:
+                candidate.solution[i] = random.choice(list(range(candidate._m)))
 
 class onePointCross(GA.ICrossover):
 
-    def __init__(self):
-        pass
+    def __init__(self, pb):
+        super().__init__(pb)
 
     def numParents(self):
         return 2
 
-    def call(self, parents :List[GA.ICandidate], pb :float) -> List[GA.ICandidate]:
+    def call(self, parents :List[GA.ICandidate]) -> List[GA.ICandidate]:
         if len(parents) != 2:
             print("onePointCross takes only 2 parents")
             raise ValueError
-        if random.random() > pb:
+        if random.random() > self._pb:
             return parents
-        new_parents = copy.deepcopy(parents)
-        sol_length = len(new_parents[0]._solution)
+        sol_length = len(parents[0].solution)
         cut = random.randint(1,sol_length)
-        tmp = new_parents[0]._solution[0:cut]
-        new_parents[0]._solution[0:cut] = new_parents[1]._solution[0:cut]
-        new_parents[1]._solution[0:cut] = tmp
-        return new_parents
+        tmp = parents[0].solution[0:cut]
+        parents[0].solution[0:cut] = parents[1].solution[0:cut]
+        parents[1].solution[0:cut] = tmp
+        return parents

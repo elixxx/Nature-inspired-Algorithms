@@ -10,7 +10,15 @@ class ISelection():
         """
         raise NotImplementedError
 
+
 class ICrossover():
+    def __init__(self, pb):
+        self._pb = pb;
+
+    @property
+    def pb(self):
+        return self._pb
+
     def call(self, parents :List[ICandidate], pb :float) -> List[ICandidate]:
         """
         Cross N Parents and create N new crossed Candidate
@@ -25,6 +33,13 @@ class ICrossover():
         raise NotImplementedError
 
 class IMutation():
+    def __init__(self, pb):
+        self._pb = pb;
+
+    @property
+    def pb(self):
+        return self._pb
+
     def call(self, candidate :ICandidate, pb :float) -> ICandidate:
         """
         Mutate a property of candidate for givven pb

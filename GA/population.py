@@ -23,23 +23,35 @@ class Population():
         for i, cand in enumerate(self._population):
             for a in range(i,self._size):
                 cum_div += cand.diversity(self._population[a])
+                steps += 1
         self._diversity = cum_div/steps
         return self._diversity
 
-    def mutate(self, pb):
+    def mutate(self):
         self._diversity = None
         for i, cand in enumerate(self._population):
-            self._population[i] = self._mutation.call(self._population[i], pb)
+            self._mutation.call(self._population[i])
 
-    def crossover(self, pb):
+    def crossover(self):
         self._diversity = None
         for i, cand in enumerate(self._population):
             for a in range(i,self._size):
-                self._population[i], self._population[a] = self._crossover.call((self._population[i],self._population[a]),pb)
+                self._crossover.call((self._population[i],self._population[a]))
 
     def select(self):
         self._diversity = None
         self._population = self._selection.select(self._population)
 
     def gatherPandas(self):
-        pd = pandas.DataFrame()
+        pd = pandas.DataFrame(columns=["CrossOP","CrossPB","MutOP","MutPB", "SelectionOP", "FitBEST", "FitAVG", "FitMIN", "Div"])
+        pd["CrossOP"] = self._crossover
+        pd.loc[0] = [type(self._crossover),
+                     self._crossover.pb,
+                     type(self._mutation),
+                     self._mutation.pb,
+                     type(self._selection),
+                     max([ind.cost for ind in self._population]),
+                     min([ind.cost for ind in self._population]),
+                     sum(ind.cost for ind in self._population)/len(self._population),
+                     self.diversity]
+        return pd
