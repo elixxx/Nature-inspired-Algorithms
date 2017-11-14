@@ -1,36 +1,73 @@
 import random
 import GA
 import pandas as pd
+import pickle
 from tqdm import tqdm
+from multiprocessing import Pool
+import time
+import numpy as np
 import matplotlib.pyplot as plt
-
 pd.set_option('display.expand_frame_repr', False)
 random.seed(3)
 
-# encapsulate GA
-# Generate pd for log daten : fit of each candidate in population,
+
+def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, pop_sizes, sel_instances, benchmarks):
+    number = len(mut_rates)*len(mut_classes)*len(cross_rates)\
+             *len(cross_classes)*len(pop_sizes)\
+             *len(sel_instances)*len(benchmarks)
+    print("Num of experiments: ",number)
+    arbeiter_becken = Pool(4)
+    gas = list()
+    optimized_fitnesses = list()
+    for mut_class in mut_classes:
+        for mut_instance in map(mut_class,mut_rates):
+            for cross_class in cross_classes:
+                for cross_instance in map(cross_class, cross_rates):
+                    for pop_size in pop_sizes:
+                        for sel_instance in sel_instances:
+                            for benchmark in benchmarks:
+                                gas.append(GA.Optimizer(n_generations=generations,
+                                                        population_size=pop_size,
+                                                        crossover=cross_instance,
+                                                        mutation=mut_instance,
+                                                        selection=sel_instance,
+                                                        fnc_candidate_generator=lambda: GA.Makespan.generate_random_candidate(
+                                                       benchmark)))
+                                optimized_fitnesses.append(arbeiter_becken.apply_async(gas[-1].optimize))
+    frame = pd.DataFrame()
+    for f in tqdm(optimized_fitnesses):
+        frame.append(f.get(), ignore_index=True)
+    arbeiter_becken.close()
+    return frame
+
 # Make sweet plots
+# mut_rates = np.arange(0.05, 0.45, 0.1)
+# mut_classes = [GA.RandomMutation,]
+# cross_rates = np.arange(0.1, 0.9, 0.1)
+# cross_classes = [GA.OnePointCross,GA.TwoPointCross]
+# pop_sizes = np.arange(100, 300, 50)
+# benchmarks = ["Bench1", "Bench2", "Bench3"]
+# sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
+mut_rates = np.arange(0.35, 0.45, 0.1)
+mut_classes = [GA.RandomMutation,]
+cross_rates = np.arange(0.8, 0.9, 0.1)
+cross_classes = [GA.OnePointCross,GA.TwoPointCross]
+pop_sizes = np.arange(50, 100, 50)
+benchmarks = ["Bench1", "Bench2", "Bench3"]
+sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
+generations = 1
 
-mut = GA.randomMutation(0.08)
-cross = GA.onePointCross(0.8)
-sel = GA.RouletWheel()
-generations = 20
-pop = GA.Population(300,
-                    crossover=cross,
-                    mutation=mut,
-                    selection=sel,
-                    fnc_candidate_generator=lambda: GA.Makespan.generate_random_candidate(conf="Bench1"))
-results = pd.DataFrame()
+results = experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, pop_sizes, sel_instances, benchmarks)
+results.to_pickle(str(time.time())+"datei.pkl")
+print("Finished")
+# ga2 = GA.Optimizer(population_size=200,
+#                   crossover=GA.OnePointCross(0.8),
+#                   mutation=GA.RandomMutation(0.08),
+#                   selection=GA.TournamentSelection(40,0.75),
+#                   fnc_candidate_generator=lambda: GA.Makespan.generate_random_candidate("Bench2"))
+#
+# ga2.optimize(generations)
+# p.apply_async(ga2.optimize, args=(generations,))
 
+time.sleep(20)
 
-for i in tqdm(range(generations)):
-
-    pop.crossover()
-    pop.mutate()
-    pop.select()
-    tmp = pop.gatherPandas()
-    results = results.append(tmp,ignore_index=True)
-print(results)
-results.plot(y=["FitBEST","FitAVG"])
-results.plot(y="Div")
-plt.show()

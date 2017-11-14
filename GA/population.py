@@ -10,7 +10,7 @@ class Population():
         self._mutation = mutation
         self._crossover = crossover
         self._selection = selection
-        self._candidate_generator = fnc_candidate_generator
+        # self._candidate_generator = fnc_candidate_generator
         self._population = [fnc_candidate_generator() for i in range(size)]
         self._diversity = None
 
@@ -43,15 +43,13 @@ class Population():
         self._population = self._selection.select(self._population)
 
     def gatherPandas(self):
-        pd = pandas.DataFrame(columns=["CrossOP","CrossPB","MutOP","MutPB", "SelectionOP", "FitBEST", "FitAVG", "FitMIN", "Div"])
+        pd = pandas.DataFrame(columns=["CrossOP","CrossPB","MutOP","MutPB", "SelectionOP", "FitMin", "Div"])
         pd["CrossOP"] = self._crossover
         pd.loc[0] = [type(self._crossover),
                      self._crossover.pb,
                      type(self._mutation),
                      self._mutation.pb,
                      type(self._selection),
-                     max([ind.cost for ind in self._population]),
                      min([ind.cost for ind in self._population]),
-                     sum(ind.cost for ind in self._population)/len(self._population),
                      self.diversity]
         return pd

@@ -19,7 +19,7 @@ class ICrossover():
     def pb(self):
         return self._pb
 
-    def call(self, parents :List[ICandidate], pb :float) -> List[ICandidate]:
+    def call(self, parents :List[ICandidate]) -> List[ICandidate]:
         """
         Cross N Parents and create N new crossed Candidate
         :param parents: List of N parents, at the moment mostly just 2
@@ -40,7 +40,7 @@ class IMutation():
     def pb(self):
         return self._pb
 
-    def call(self, candidate :ICandidate, pb :float) -> ICandidate:
+    def call(self, candidate :ICandidate) -> ICandidate:
         """
         Mutate a property of candidate for givven pb
         :param candidate: candidate which is calculated
