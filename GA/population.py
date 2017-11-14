@@ -45,11 +45,11 @@ class Population():
     def gatherPandas(self):
         pd = pandas.DataFrame(columns=["CrossOP","CrossPB","MutOP","MutPB", "SelectionOP", "FitMin", "Div"])
         pd["CrossOP"] = self._crossover
-        pd.loc[0] = [type(self._crossover),
+        pd.loc[0] = [str(type(self._crossover)),
                      self._crossover.pb,
-                     type(self._mutation),
+                     str(type(self._mutation)),
                      self._mutation.pb,
-                     type(self._selection),
+                     str(type(self._selection)),
                      max([ind.cost for ind in self._population]),
                      self.diversity]
         return pd
