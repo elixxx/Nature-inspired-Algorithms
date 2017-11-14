@@ -1,12 +1,10 @@
 import random
 import GA
 import pandas as pd
-import pickle
 from tqdm import tqdm
 from multiprocessing import Pool
 import time
 import numpy as np
-import matplotlib.pyplot as plt
 pd.set_option('display.expand_frame_repr', False)
 random.seed(3)
 
@@ -36,7 +34,7 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
                                 optimized_fitnesses.append(arbeiter_becken.apply_async(gas[-1].optimize))
     frame = pd.DataFrame()
     for f in tqdm(optimized_fitnesses):
-        frame.append(f.get(), ignore_index=True)
+        frame = frame.append(f.get(), ignore_index=True)
     arbeiter_becken.close()
     return frame
 
@@ -60,14 +58,6 @@ generations = 1
 results = experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, pop_sizes, sel_instances, benchmarks)
 results.to_pickle(str(time.time())+"datei.pkl")
 print("Finished")
-# ga2 = GA.Optimizer(population_size=200,
-#                   crossover=GA.OnePointCross(0.8),
-#                   mutation=GA.RandomMutation(0.08),
-#                   selection=GA.TournamentSelection(40,0.75),
-#                   fnc_candidate_generator=lambda: GA.Makespan.generate_random_candidate("Bench2"))
-#
-# ga2.optimize(generations)
-# p.apply_async(ga2.optimize, args=(generations,))
 
 time.sleep(20)
 

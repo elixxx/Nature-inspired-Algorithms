@@ -50,6 +50,6 @@ class Population():
                      type(self._mutation),
                      self._mutation.pb,
                      type(self._selection),
-                     min([ind.cost for ind in self._population]),
+                     max([ind.cost for ind in self._population]),
                      self.diversity]
         return pd
