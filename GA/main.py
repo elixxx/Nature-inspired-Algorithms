@@ -25,14 +25,16 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
                     for pop_size in pop_sizes:
                         for sel_instance in sel_instances:
                             for benchmark in benchmarks:
-                                gas.append(GA.Optimizer(n_generations=generations,
-                                                        population_size=pop_size,
-                                                        crossover=cross_instance,
-                                                        mutation=mut_instance,
-                                                        selection=sel_instance,
-                                                        candidate_type=GA.Makespan,
-                                                        candidate_gen_parms=benchmark))
-                                optimized_fitnesses.append(arbeiter_becken.apply_async(gas[-1].optimize))
+                                for run in range(100):
+                                    gas.append(GA.Optimizer(n_generations=generations,
+                                                            population_size=pop_size,
+                                                            crossover=cross_instance,
+                                                            mutation=mut_instance,
+                                                            selection=sel_instance,
+                                                            candidate_type=GA.Makespan,
+                                                            candidate_gen_parms=benchmark,
+                                                            run=run))
+                                    optimized_fitnesses.append(arbeiter_becken.apply_async(gas[-1].optimize))
     frame = pd.DataFrame()
     for f in tqdm(optimized_fitnesses):
         frame = frame.append(f.get(), ignore_index=True)

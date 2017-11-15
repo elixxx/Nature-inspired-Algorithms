@@ -29,7 +29,7 @@ class Makespan(GA.ICandidate):
 
     @classmethod
     def generate_random_candidate(cls, conf):
-        if(conf=="Bench1"):
+        if(conf == "Bench1"):
             # 6000 for benchmark problem 1
             m = 20
             jobs = [random.randint(10,1000) for i in range(200)]
