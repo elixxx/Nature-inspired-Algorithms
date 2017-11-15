@@ -41,25 +41,24 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
     return frame
 
 # Make sweet plots
-# mut_rates = np.arange(0.05, 0.45, 0.1)
-# mut_classes = [GA.RandomMutation,]
-# cross_rates = np.arange(0.1, 0.9, 0.1)
-# cross_classes = [GA.OnePointCross,GA.TwoPointCross]
-# pop_sizes = np.arange(100, 300, 50)
-# benchmarks = ["Bench1", "Bench2", "Bench3"]
-# sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
-mut_rates = np.arange(0.35, 0.45, 0.1)
-mut_classes = [GA.RandomMutation,]
-cross_rates = np.arange(0.8, 0.9, 0.1)
+mut_rates = np.arange(0.05, 0.46, 0.2)
+mut_classes = [GA.RandomMutation, GA.CreepMutation]
+cross_rates = np.arange(0.1, 0.91, 0.2)
 cross_classes = [GA.OnePointCross,GA.TwoPointCross]
-pop_sizes = np.arange(50, 100, 50)
+pop_sizes = np.arange(100, 301, 100)
 benchmarks = ["Bench1", "Bench2", "Bench3"]
 sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
-generations = 1
+#mut_rates = np.arange(0.35, 0.45, 0.1)
+#mut_classes = [GA.RandomMutation,]
+#cross_rates = np.arange(0.8, 0.9, 0.1)
+#cross_classes = [GA.OnePointCross,GA.TwoPointCross]
+#pop_sizes = np.arange(50, 100, 50)
+#benchmarks = ["Bench1", "Bench2", "Bench3"]
+#sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
+generations = 50
 
 results = experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, pop_sizes, sel_instances, benchmarks)
 results.to_pickle(str(time.time())+"log.pkl")
 print("Finished")
 
 time.sleep(20)
-

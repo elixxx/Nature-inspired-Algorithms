@@ -1,6 +1,5 @@
 import GA
 import random
-import copy
 import numpy as np
 from typing import List
 
@@ -12,7 +11,7 @@ class Makespan(GA.ICandidate):
         self._cost = None
         if solution is None:
             # self._solution = np.array([random.choice(list(range(self._m))) for i in self._jobTimes])
-            self._solution = np.random.choice(self._m,size=len(self._jobTimes),replace=True)
+            self._solution = np.random.choice(self._m, size=len(self._jobTimes), replace=True)
         else:
             self._solution = solution
 
@@ -83,6 +82,18 @@ class RandomMutation(GA.IMutation):
             if random.random() < self._pb:
                 candidate.solution[i] = np.random.choice(list(range(candidate._m)))
 
+class CreepMutation(GA.IMutation):
+
+
+    def __init__(self, pb):
+        super().__init__(pb)
+
+    def call(self, candidate: Makespan):
+        for i, gene in enumerate(candidate.solution):
+            if random.random() < self._pb:
+                candidate.solution[i] = (
+                    candidate.solution[i] + np.random.choice[-1, 1] % candidate._m
+                )
 
 class OnePointCross(GA.ICrossover):
 
