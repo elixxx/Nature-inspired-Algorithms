@@ -59,9 +59,9 @@ class Makespan(GA.ICandidate):
     def cost(self):
         if self._cost is not None:
             return self._cost
-        cost = [0]*self._m
+        cost = [0] * self._m
         for jobID, machine in enumerate(self._solution):
-            cost[machine]+=self._jobTimes[jobID]
+            cost[machine] += self._jobTimes[jobID]
         self._cost = max(cost)
         return self._cost
 
@@ -92,7 +92,7 @@ class CreepMutation(GA.IMutation):
         for i, gene in enumerate(candidate.solution):
             if random.random() < self._pb:
                 candidate.solution[i] = (
-                    candidate.solution[i] + np.random.choice([-1, 1]) % candidate._m
+                    (candidate.solution[i] + np.random.choice([-1, 1])) % candidate._m
                 )
 
 class OnePointCross(GA.ICrossover):
