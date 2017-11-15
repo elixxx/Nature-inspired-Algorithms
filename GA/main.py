@@ -47,7 +47,7 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
 mut_rates = [0.1]
 mut_classes = [GA.RandomMutation, GA.CreepMutation]
 cross_rates =[0.3]
-cross_classes = [GA.OnePointCross,GA.TwoPointCross]
+cross_classes = [GA.OnePointCross, GA.TwoPointCross]
 pop_sizes = [150]
 benchmarks = ["Bench1", "Bench2", "Bench3"]
 sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
