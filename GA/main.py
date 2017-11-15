@@ -2,6 +2,7 @@ import random
 import GA
 import pandas as pd
 from tqdm import tqdm
+import multiprocessing
 from multiprocessing import Pool
 import time
 import numpy as np
@@ -15,7 +16,7 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
              * len(cross_classes) * len(pop_sizes)
              * len(sel_instances) * len(benchmarks))
     print("Num of experiments: ", number)
-    arbeiter_becken = Pool(4)
+    arbeiter_becken = Pool(multiprocessing.cpu_count())
     gas = list()
     optimized_fitnesses = list()
     for mut_class in mut_classes:

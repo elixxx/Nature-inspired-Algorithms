@@ -6,7 +6,8 @@ class Population():
                  crossover: ICrossover,
                  selection: ISelection,
                  candidate_type: ICandidate,
-                 candidate_gen_parms):
+                 candidate_gen_parms,
+                 run):
         self._size = size
         self._mutation = mutation
         self._crossover = crossover
@@ -15,6 +16,7 @@ class Population():
         self._population = [candidate_type.generate_random_candidate(candidate_gen_parms) for i in range(size)]
         self._diversity = None
         self._candidate_gen_parms = candidate_gen_parms
+	self._run = run
 
     @property
     def diversity(self):
@@ -55,5 +57,5 @@ class Population():
                      str(type(self._selection)),
                      max([ind.cost for ind in self._population]),
                      self.diversity,
-                     run]
+                     self._run]
         return df
