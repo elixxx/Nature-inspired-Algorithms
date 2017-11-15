@@ -3,12 +3,13 @@ from tqdm import tqdm
 import pandas as pd
 class Optimizer:
 
-    def __init__(self, n_generations, population_size, crossover, mutation, selection, fnc_candidate_generator):
+    def __init__(self, n_generations, population_size, crossover, mutation, selection, candidate_type, candidate_gen_parms):
         self._population = GA.Population(population_size,
                                          crossover=crossover,
                                          mutation=mutation,
                                          selection=selection,
-                                         fnc_candidate_generator=fnc_candidate_generator)
+                                         candidate_type=candidate_type,
+                                         candidate_gen_parms=candidate_gen_parms)
         self._n_generations = n_generations
 
     def optimize(self):

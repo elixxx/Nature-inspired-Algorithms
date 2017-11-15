@@ -8,6 +8,7 @@ import numpy as np
 pd.set_option('display.expand_frame_repr', False)
 random.seed(3)
 
+# problem in pandas
 
 def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, pop_sizes, sel_instances, benchmarks):
     number = len(mut_rates)*len(mut_classes)*len(cross_rates)\
@@ -29,13 +30,14 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
                                                         crossover=cross_instance,
                                                         mutation=mut_instance,
                                                         selection=sel_instance,
-                                                        fnc_candidate_generator=lambda: GA.Makespan.generate_random_candidate(
-                                                       benchmark)))
+                                                        candidate_type=GA.Makespan,
+                                                        candidate_gen_parms=benchmark))
                                 optimized_fitnesses.append(arbeiter_becken.apply_async(gas[-1].optimize))
     frame = pd.DataFrame()
     for f in tqdm(optimized_fitnesses):
         frame = frame.append(f.get(), ignore_index=True)
     arbeiter_becken.close()
+    arbeiter_becken.join()
     return frame
 
 # Make sweet plots
@@ -56,7 +58,7 @@ sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
 generations = 1
 
 results = experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, pop_sizes, sel_instances, benchmarks)
-results.to_pickle(str(time.time())+"datei.pkl")
+results.to_pickle(str(time.time())+"log.pkl")
 print("Finished")
 
 time.sleep(20)

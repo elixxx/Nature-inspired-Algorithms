@@ -5,14 +5,16 @@ class Population():
                  mutation: IMutation,
                  crossover: ICrossover,
                  selection: ISelection,
-                 fnc_candidate_generator):
+                 candidate_type: ICandidate,
+                 candidate_gen_parms):
         self._size = size
         self._mutation = mutation
         self._crossover = crossover
         self._selection = selection
         # self._candidate_generator = fnc_candidate_generator
-        self._population = [fnc_candidate_generator() for i in range(size)]
+        self._population = [candidate_type.generate_random_candidate(candidate_gen_parms) for i in range(size)]
         self._diversity = None
+        self._candidate_gen_parms = candidate_gen_parms
 
     @property
     def diversity(self):
@@ -36,16 +38,17 @@ class Population():
         self._diversity = None
         for i, cand in enumerate(self._population):
             for a in range(i,self._size):
-                self._crossover.call((self._population[i],self._population[a]))
+                self._crossover.call([self._population[i],self._population[a]])
 
     def select(self):
         self._diversity = None
         self._population = self._selection.select(self._population)
 
     def gatherPandas(self):
-        pd = pandas.DataFrame(columns=["CrossOP","CrossPB","MutOP","MutPB", "SelectionOP", "FitMin", "Div"])
-        pd["CrossOP"] = self._crossover
-        pd.loc[0] = [str(type(self._crossover)),
+        pd = pandas.DataFrame(columns=["Problem", "CrossOP","CrossPB","MutOP",
+                                       "MutPB", "SelectionOP", "FitMin", "Div"])
+        pd.loc[0] = [self._candidate_gen_parms,
+                     str(type(self._crossover)),
                      self._crossover.pb,
                      str(type(self._mutation)),
                      self._mutation.pb,
