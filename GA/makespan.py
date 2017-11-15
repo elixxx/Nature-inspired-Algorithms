@@ -92,7 +92,7 @@ class CreepMutation(GA.IMutation):
         for i, gene in enumerate(candidate.solution):
             if random.random() < self._pb:
                 candidate.solution[i] = (
-                    candidate.solution[i] + np.random.choice[-1, 1] % candidate._m
+                    candidate.solution[i] + np.random.choice([-1, 1]) % candidate._m
                 )
 
 class OnePointCross(GA.ICrossover):

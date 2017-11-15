@@ -11,15 +11,15 @@ random.seed(3)
 # problem in pandas
 
 def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, pop_sizes, sel_instances, benchmarks):
-    number = len(mut_rates)*len(mut_classes)*len(cross_rates)\
-             *len(cross_classes)*len(pop_sizes)\
-             *len(sel_instances)*len(benchmarks)
-    print("Num of experiments: ",number)
+    number = (len(mut_rates) * len(mut_classes) * len(cross_rates)
+             * len(cross_classes) * len(pop_sizes)
+             * len(sel_instances) * len(benchmarks))
+    print("Num of experiments: ", number)
     arbeiter_becken = Pool(4)
     gas = list()
     optimized_fitnesses = list()
     for mut_class in mut_classes:
-        for mut_instance in map(mut_class,mut_rates):
+        for mut_instance in map(mut_class, mut_rates):
             for cross_class in cross_classes:
                 for cross_instance in map(cross_class, cross_rates):
                     for pop_size in pop_sizes:
@@ -41,11 +41,11 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
     return frame
 
 # Make sweet plots
-mut_rates = np.arange(0.05, 0.46, 0.2)
+mut_rates = [0.1]
 mut_classes = [GA.RandomMutation, GA.CreepMutation]
-cross_rates = np.arange(0.1, 0.91, 0.2)
+cross_rates =[0.3]
 cross_classes = [GA.OnePointCross,GA.TwoPointCross]
-pop_sizes = np.arange(100, 301, 100)
+pop_sizes = [150]
 benchmarks = ["Bench1", "Bench2", "Bench3"]
 sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
 #mut_rates = np.arange(0.35, 0.45, 0.1)
