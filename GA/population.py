@@ -1,11 +1,11 @@
-from GA import ICandidate, ICrossover, IMutation, ISelection
+from GA import BaseGACandidate, BaseGACrossover, BaseGAMutation, BaseGASelection
 import pandas
 class Population():
     def __init__(self, size: int,
-                 mutation: IMutation,
-                 crossover: ICrossover,
-                 selection: ISelection,
-                 candidate_type: ICandidate,
+                 mutation: BaseGAMutation,
+                 crossover: BaseGACrossover,
+                 selection: BaseGASelection,
+                 candidate_type: BaseGACandidate,
                  candidate_gen_parms,
                  run):
         self._size = size
@@ -30,6 +30,15 @@ class Population():
                 steps += 1
         self._diversity = cum_div/steps
         return self._diversity
+
+    @property
+    def parameters(self):
+        return {
+            'PopSize': self._size,
+            'Mutation': self._mutation,
+            'Crossover': self._crossover,
+            'Selection': self._selection,
+        }
 
     def mutate(self):
         self._diversity = None

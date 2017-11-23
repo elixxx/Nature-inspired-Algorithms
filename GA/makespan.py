@@ -4,7 +4,7 @@ import numpy as np
 from typing import List
 
 
-class Makespan(GA.ICandidate):
+class Makespan(GA.BaseGACandidate):
     def __init__(self, m, jobTimes, solution=None):
         self._m = m
         self._jobTimes = jobTimes
@@ -15,10 +15,13 @@ class Makespan(GA.ICandidate):
         else:
             self._solution = solution
 
-    def __eq__(self, other):
-        return type(self) == type(other) and self._solution == other._solution
+
+
+    def __str__(self):
+        return "GACandidate.Makespane"
 
     def diversity(self, other):
+        return 1
         divs = 0
         for i, him in zip(self._solution, other._solution):
             if i != him:
@@ -71,7 +74,7 @@ class Makespan(GA.ICandidate):
         return self._solution
 
 
-class RandomMutation(GA.IMutation):
+class RandomMutation(GA.BaseGAMutation):
 
 
     def __init__(self, pb):
@@ -82,7 +85,14 @@ class RandomMutation(GA.IMutation):
             if random.random() < self._pb:
                 candidate.solution[i] = np.random.choice(list(range(candidate._m)))
 
-class CreepMutation(GA.IMutation):
+    def __str__(self):
+        return f'Mutation.RandomMutation'
+
+    @property
+    def parameters(self):
+        return {'pb': self.pb}
+
+class CreepMutation(GA.BaseGAMutation):
 
 
     def __init__(self, pb):
@@ -95,7 +105,14 @@ class CreepMutation(GA.IMutation):
                     (candidate.solution[i] + np.random.choice([-1, 1])) % candidate._m
                 )
 
-class OnePointCross(GA.ICrossover):
+    def __str__(self):
+        return f'Mutation.CreepMutation'
+
+    @property
+    def parameters(self):
+        return {'pb': self.pb}
+
+class OnePointCross(GA.BaseGACrossover):
 
     def __init__(self, pb):
         super().__init__(pb)
@@ -103,7 +120,7 @@ class OnePointCross(GA.ICrossover):
     def numParents(self):
         return 2
 
-    def call(self, parents :List[GA.ICandidate]) -> List[GA.ICandidate]:
+    def call(self, parents :List[GA.BaseGACandidate]) -> List[GA.BaseGACandidate]:
         if len(parents) != 2:
             print("onePointCross takes only 2 parents")
             raise ValueError
@@ -116,8 +133,15 @@ class OnePointCross(GA.ICrossover):
         parents[1].solution[0:cut] = tmp
         return parents
 
+    def __str__(self):
+        return f'Crossover.OnePointCross'
 
-class TwoPointCross(GA.ICrossover):
+    @property
+    def parameters(self):
+        return {'pb': self.pb}
+
+
+class TwoPointCross(GA.BaseGACrossover):
 
     def __init__(self, pb):
         super().__init__(pb)
@@ -125,7 +149,7 @@ class TwoPointCross(GA.ICrossover):
     def numParents(self):
         return 2
 
-    def call(self, parents :List[GA.ICandidate]) -> List[GA.ICandidate]:
+    def call(self, parents :List[GA.BaseGACandidate]) -> List[GA.BaseGACandidate]:
         if len(parents) != 2:
             print("onePointCross takes only 2 parents")
             raise ValueError
@@ -138,3 +162,10 @@ class TwoPointCross(GA.ICrossover):
         parents[0].solution[cut_start:cut_end] = parents[1].solution[cut_start:cut_end]
         parents[1].solution[cut_start:cut_end] = tmp
         return parents
+
+    def __str__(self):
+        return f'Crossover.TwoPointCross'
+
+    @property
+    def parameters(self):
+        return {'pb': self.pb}

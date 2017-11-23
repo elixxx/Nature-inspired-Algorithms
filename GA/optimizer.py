@@ -1,7 +1,8 @@
 import GA
 from tqdm import tqdm
 import pandas as pd
-class Optimizer:
+from interfaces import BaseOptimizer
+class Optimizer(BaseOptimizer):
 
     def __init__(self, n_generations, population_size, crossover, mutation, selection, candidate_type, candidate_gen_parms, run):
         self._population = GA.Population(population_size,
@@ -36,3 +37,10 @@ class Optimizer:
 
             # results = results.append(frame, ignore_index=True)
         return last_frame
+
+    def __str__(self):
+        return "GAOptimizer"
+
+    @property
+    def parameters(self):
+        return self._population.parameters
