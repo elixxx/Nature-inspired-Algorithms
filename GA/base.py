@@ -1,8 +1,16 @@
-from GA.iCandidate import ICandidate
-from typing import List
-class ISelection():
+from interfaces import BaseCandidate
+from typing import List, Union, Sequence
+import interfaces
 
-    def select(self, population: List[ICandidate]) -> List[ICandidate]:
+
+class BaseGACandidate(BaseCandidate):
+
+    def diversity(self, other):
+        raise NotImplementedError
+
+class BaseGASelection(interfaces.BaseStrategy):
+
+    def select(self, population: List[BaseGACandidate]) -> List[BaseGACandidate]:
         """
         Create a new population with len(population) candidates which
         :param population: old Population out of with the new one will get created
@@ -11,15 +19,15 @@ class ISelection():
         raise NotImplementedError
 
 
-class ICrossover():
+class BaseGACrossover(interfaces.BaseStrategy):
     def __init__(self, pb):
-        self._pb = pb;
+        self._pb = pb
 
     @property
     def pb(self):
         return self._pb
 
-    def call(self, parents :List[ICandidate]) -> List[ICandidate]:
+    def call(self, parents: List[Union[BaseGACandidate, Sequence]]):
         """
         Cross N Parents and create N new crossed Candidate
         :param parents: List of N parents, at the moment mostly just 2
@@ -32,15 +40,16 @@ class ICrossover():
     def numParents(self) -> int:
         raise NotImplementedError
 
-class IMutation():
+
+class BaseGAMutation(interfaces.BaseStrategy):
     def __init__(self, pb):
-        self._pb = pb;
+        self._pb = pb
 
     @property
     def pb(self):
         return self._pb
 
-    def call(self, candidate :ICandidate) -> ICandidate:
+    def call(self, candidate: Union[BaseGACandidate, Sequence]):
         """
         Mutate a property of candidate for givven pb
         :param candidate: candidate which is calculated
