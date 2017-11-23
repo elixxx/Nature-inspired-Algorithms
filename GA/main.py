@@ -26,7 +26,7 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
                     for pop_size in pop_sizes:
                         for sel_instance in sel_instances:
                             for benchmark in benchmarks:
-                                for run in range(100):
+                                for run in range(1):
                                     gas.append(GA.Optimizer(n_generations=generations,
                                                             population_size=pop_size,
                                                             crossover=cross_instance,
@@ -45,12 +45,12 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
 
 # Make sweet plots
 mut_rates = [0.1]
-mut_classes = [GA.RandomMutation, GA.CreepMutation]
+mut_classes = [GA.RandomMutation]
 cross_rates =[0.3]
-cross_classes = [GA.OnePointCross, GA.TwoPointCross]
-pop_sizes = [150]
-benchmarks = ["Bench1", "Bench2", "Bench3"]
-sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
+cross_classes = [GA.OnePointCross]
+pop_sizes = [40]
+benchmarks = ["Bench1"]
+sel_instances = [ GA.TournamentSelection(20, 0.75)]
 #mut_rates = np.arange(0.35, 0.45, 0.1)
 #mut_classes = [GA.RandomMutation,]
 #cross_rates = np.arange(0.8, 0.9, 0.1)
@@ -58,7 +58,7 @@ sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
 #pop_sizes = np.arange(50, 100, 50)
 #benchmarks = ["Bench1", "Bench2", "Bench3"]
 #sel_instances = [GA.RouletteWheel(), GA.TournamentSelection(20, 0.75)]
-generations = 50
+generations = 1
 
 results = experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, pop_sizes, sel_instances, benchmarks)
 results.to_pickle(str(time.time())+"log.pkl")

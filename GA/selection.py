@@ -1,22 +1,19 @@
-from GA.iOperations import ISelection
-from GA import ICandidate
+from GA.base import BaseGASelection
+from GA import BaseGACandidate
 from typing import List
 from sortedcontainers import SortedDict
 import random
 import copy
 import numpy as np
-import bisect
 
-
-class RouletteWheel(ISelection):
+class RouletteWheel(BaseGASelection):
 
     def __init__(self):
         pass
 
-
-    def select(self, population: List[ICandidate]) -> List[ICandidate]:
+    def select(self, population: List[BaseGACandidate]) -> List[BaseGACandidate]:
         """
-        Create a new population with len(population) candidates which
+        Create a new population with len(population) candidates, based on cost proportion
         :param population: old Population out of with the new one will get created
         :return: A new deep copied Population
         """
@@ -34,13 +31,27 @@ class RouletteWheel(ISelection):
             new_population.append(copy.deepcopy(fit_map[key]))
         return new_population
 
+    def __str__(self):
+        return "Selection.RoulettWheel"
 
-class TournamentSelection(ISelection):
+    @property
+    def parameters(self):
+        return None
+
+
+class TournamentSelection(BaseGASelection):
+
+
     def __init__(self, tournement_size, best_win_pb):
         self._tournement_size = tournement_size
         self._best_win_pb = best_win_pb
 
-    def select(self, population: List[ICandidate]):
+    def select(self, population: List[BaseGACandidate]):
+        """
+        Create a new population with len(population) candidates, in each Tournement best or badest candidate is picked on probabily best_win_pb
+        :param population: old Population out of with the new one will get created
+        :return: A new deep copied Population
+        """
         new_population = list()
         if len(population) < self._tournement_size:
             raise ValueError("TournementSize bigger or equal populatinsize!")
@@ -54,3 +65,10 @@ class TournamentSelection(ISelection):
                 new_population.append(copy.deepcopy(tournemant[-1]))
 
         return new_population
+
+    def __str__(self):
+        return f'Selection.TournamentSelection({self._tournement_size},{self._best_win_pb})'
+
+    @property
+    def parameters(self):
+        return {'TournementSize': self._tournement_size, 'BestWinPB': self._best_win_pb}
