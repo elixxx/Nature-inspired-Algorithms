@@ -10,8 +10,7 @@ class Optimizer(BaseOptimizer):
                                          mutation=mutation,
                                          selection=selection,
                                          candidate_type=candidate_type,
-                                         candidate_gen_parms=candidate_gen_parms,
-                                         run=run)
+                                         candidate_gen_parms=candidate_gen_parms)
         self._n_generations = n_generations
 
     def optimize(self):

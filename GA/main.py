@@ -33,8 +33,7 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
                                                             mutation=mut_instance,
                                                             selection=sel_instance,
                                                             candidate_type=GA.Makespan,
-                                                            candidate_gen_parms=benchmark,
-                                                            run=run))
+                                                            candidate_gen_parms=benchmark))
                                     optimized_fitnesses.append(arbeiter_becken.apply_async(gas[-1].optimize))
     frame = pd.DataFrame()
     for f in tqdm(optimized_fitnesses):

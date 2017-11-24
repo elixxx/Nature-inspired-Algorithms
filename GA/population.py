@@ -6,8 +6,7 @@ class Population():
                  crossover: BaseGACrossover,
                  selection: BaseGASelection,
                  candidate_type: BaseGACandidate,
-                 candidate_gen_parms,
-                 run):
+                 candidate_gen_parms):
         self._size = size
         self._mutation = mutation
         self._crossover = crossover
@@ -16,7 +15,6 @@ class Population():
         self._population = [candidate_type.generate_random_candidate(candidate_gen_parms) for i in range(size)]
         self._diversity = None
         self._candidate_gen_parms = candidate_gen_parms
-        self._run = run
 
     @property
     def diversity(self):
@@ -57,7 +55,7 @@ class Population():
 
     def gatherPandas(self):
         df = pandas.DataFrame(columns=["Problem", "CrossOP","CrossPB","MutOP",
-                                       "MutPB", "SelectionOP", "FitMin", "Div", "run"])
+                                       "MutPB", "SelectionOP", "FitMin", "Div"])
         df.loc[0] = [self._candidate_gen_parms,
                      str(type(self._crossover)),
                      self._crossover.pb,
@@ -65,6 +63,5 @@ class Population():
                      self._mutation.pb,
                      str(type(self._selection)),
                      max([ind.cost for ind in self._population]),
-                     self.diversity,
-                     self._run]
+                     self.diversity]
         return df
