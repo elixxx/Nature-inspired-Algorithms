@@ -1,7 +1,6 @@
-from GA.base import BaseGASelection
-from GA import BaseGACandidate
-from typing import List
-from sortedcontainers import SortedDict
+from .. base import * 
+import typing
+import sortedcontainers
 import random
 import copy
 import numpy as np
@@ -11,14 +10,14 @@ class RouletteWheel(BaseGASelection):
     def __init__(self):
         pass
 
-    def select(self, population: List[BaseGACandidate]) -> List[BaseGACandidate]:
+    def select(self, population: typing.List[BaseGACandidate]) -> typing.List[BaseGACandidate]:
         """
         Create a new population with len(population) candidates, based on cost proportion
         :param population: old Population out of with the new one will get created
         :return: A new deep copied Population
         """
         cum_fit = 0
-        fit_map = SortedDict()
+        fit_map = sortedcontainers.SortedDict()
         new_population = list()
         for i, cand in enumerate(population):
             fit_map[cum_fit]=cand
@@ -39,14 +38,14 @@ class RouletteWheel(BaseGASelection):
         return None
 
 
-class TournamentSelection(BaseGASelection):
+class Tournament(BaseGASelection):
 
 
     def __init__(self, tournement_size, best_win_pb):
         self._tournement_size = tournement_size
         self._best_win_pb = best_win_pb
 
-    def select(self, population: List[BaseGACandidate]):
+    def select(self, population: typing.List[BaseGACandidate]):
         """
         Create a new population with len(population) candidates, in each Tournement best or badest candidate is picked on probabily best_win_pb
         :param population: old Population out of with the new one will get created
@@ -57,7 +56,8 @@ class TournamentSelection(BaseGASelection):
             raise ValueError("TournementSize bigger or equal populatinsize!")
 
         for i in range(len(population)):
-            tournemant = np.random.choice(population, size=self._tournement_size, replace=False)
+            tournemant_idx = np.random.choice(len(population),size=self._tournement_size, replace=False)
+            tournemant = [population[idx] for idx in tournemant_idx]
             tournemant = sorted(tournemant, key=lambda can:can.cost)
             if random.random() < self._best_win_pb:
                 new_population.append(copy.deepcopy(tournemant[0]))

@@ -1,11 +1,13 @@
-import random
-import GA
+import time
+from multiprocessing import Pool
 import pandas as pd
 from tqdm import tqdm
+import random
 import multiprocessing
-from multiprocessing import Pool
-import time
-import numpy as np
+import itertools
+from problems.makespan.makespan import Makespan as Makespan
+import hippie.GA as GA
+
 pd.set_option('display.expand_frame_repr', False)
 random.seed(3)
 
@@ -20,19 +22,19 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
     gas = list()
     optimized_fitnesses = list()
     for mut_class in mut_classes:
-        for mut_instance in map(mut_class, mut_rates):
-            for cross_class in cross_classes:
-                for cross_instance in map(cross_class, cross_rates):
-                    for pop_size in pop_sizes:
-                        for sel_instance in sel_instances:
-                            for benchmark in benchmarks:
-                                for run in range(1):
+        for cross_class in cross_classes:
+            for cross_instance in map(cross_class, cross_rates):
+                for pop_size in pop_sizes:
+                    for sel_instance in sel_instances:
+                        for benchmark in benchmarks:
+                            for mut_instance in map(mut_class, mut_rates, itertools.repeat(2, len(Makespan.generate_random_candidate(benchmark)))):
+                                for run in range(2):
                                     gas.append(GA.Optimizer(n_generations=generations,
                                                             population_size=pop_size,
                                                             crossover=cross_instance,
                                                             mutation=mut_instance,
                                                             selection=sel_instance,
-                                                            candidate_type=GA.Makespan,
+                                                            candidate_type=Makespan,
                                                             candidate_gen_parms=benchmark))
                                     optimized_fitnesses.append(arbeiter_becken.apply_async(gas[-1].optimize))
     frame = pd.DataFrame()
@@ -44,12 +46,12 @@ def experiment(generations, mut_rates, mut_classes, cross_rates, cross_classes, 
 
 # Make sweet plots
 mut_rates = [0.1]
-mut_classes = [GA.RandomMutation]
+mut_classes = [GA.mutation.RandomMutation, GA.mutation.CreepMutation]
 cross_rates =[0.3]
-cross_classes = [GA.OnePointCross]
+cross_classes = [GA.crossover.OnePointCross, GA.crossover.TwoPointCross]
 pop_sizes = [40]
 benchmarks = ["Bench1"]
-sel_instances = [ GA.TournamentSelection(20, 0.75)]
+sel_instances = [GA.selection.Tournament(20, 0.75), GA.selection.RouletteWheel()]
 #mut_rates = np.arange(0.35, 0.45, 0.1)
 #mut_classes = [GA.RandomMutation,]
 #cross_rates = np.arange(0.8, 0.9, 0.1)

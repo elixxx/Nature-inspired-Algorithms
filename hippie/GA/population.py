@@ -1,5 +1,7 @@
-from GA import BaseGACandidate, BaseGACrossover, BaseGAMutation, BaseGASelection
+from .base import *
 import pandas
+
+
 class Population():
     def __init__(self, size: int,
                  mutation: BaseGAMutation,

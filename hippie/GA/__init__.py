@@ -1,5 +1,5 @@
-from GA.base import *
-from GA.makespan import *
-from GA.population import *
-from GA.selection import *
-from GA.optimizer import *
+from .base import BaseGASelection, BaseGACandidate, BaseGACrossover, BaseGAMutation
+from .optimizer import Optimizer
+from . import selection as selection
+from . import crossover as crossover
+from . import mutation as mutation

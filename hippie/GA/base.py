@@ -1,9 +1,8 @@
-from interfaces import BaseCandidate
 from typing import List, Union, Sequence
-import interfaces
+import hippie.interfaces as interfaces
 
 
-class BaseGACandidate(BaseCandidate):
+class BaseGACandidate(interfaces.BaseCandidate):
 
     def diversity(self, other):
         raise NotImplementedError

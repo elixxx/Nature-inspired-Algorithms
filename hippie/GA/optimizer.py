@@ -1,11 +1,10 @@
-import GA
-from tqdm import tqdm
-import pandas as pd
-from interfaces import BaseOptimizer
-class Optimizer(BaseOptimizer):
+from .population import Population
+import hippie.interfaces as interfaces
 
-    def __init__(self, n_generations, population_size, crossover, mutation, selection, candidate_type, candidate_gen_parms, run):
-        self._population = GA.Population(population_size,
+class Optimizer(interfaces.BaseOptimizer):
+
+    def __init__(self, n_generations, population_size, crossover, mutation, selection, candidate_type, candidate_gen_parms):
+        self._population = Population(population_size,
                                          crossover=crossover,
                                          mutation=mutation,
                                          selection=selection,
