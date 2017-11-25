@@ -14,11 +14,11 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
 
         while not self._convergence_criterion.converged(self._ants, self._pheromones):
             for ant in self._ants:
-                ant.find_path()
+                #ant.find_path()
+                ant.find_path(self._pheromones) #Ants need the recent pheromone trails to generate their path
 
             self._pheromones = self._evaporator.evaporate(self._pheromones)
 
             self._pheromones = self._intensifier.intensify(self._ants, self._pheromones)
 
         return min(self._ants, key=lambda x: x.cost())
-
