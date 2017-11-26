@@ -7,7 +7,7 @@ import time
 
 def solve_tsp(path):
     distance_matrix = parse_to_matrix(path)
-    distance_matrix = np.random.rand(1000, 1000)
+    #distance_matrix = np.random.rand(1000, 1000)
     len_path = distance_matrix.shape[0]
     pheromones = np.random.rand(len_path, len_path)
     ant = TSPAnt(distance_matrix, pathfinding_heuristic=np.zeros(len_path))
