@@ -5,7 +5,8 @@ class ZeroInitializer(interfaces.BaseStrategy):
 
 
     def initialize(self, dim):
-        return np.zeros(shape=(dim, dim))
+        return np.ones(shape=(dim, dim))
+        #return np.zeros(shape=(dim, dim))
 
     @property
     def parameters(self):
