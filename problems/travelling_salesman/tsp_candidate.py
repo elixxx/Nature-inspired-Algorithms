@@ -74,7 +74,7 @@ class TSPAnt(BaseCandidate):
         #path.append(path[0])
         self._path = path
         self.set_cost()
-        return path
+        return self
 
     #def update_pheromone_matrix(self, pheromones):
     #    pheromones = pheromones

@@ -14,11 +14,12 @@ distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/1.tsp
 
 initializer = ZeroInitializer()
 evaporator = Evaporator(rate = 0.1)
-intensifier = BestIntensifier(pheromone_increase = 0.2)
-convergence_criterion = MaxIteration(100)
+intensifier = BestIntensifier(pheromone_increase = 5)
+convergence_criterion = MaxIteration(1000)
 
-n_ants = 100
+n_ants = 20
 
 
 antColonyOptimizer = AntColonyOptimizer(TSPAnt, distance_matrix=distance_matrix, n_ants=n_ants, initializer=initializer, evaporator=evaporator, intensifier=intensifier, convergence_criterion = convergence_criterion)
 antColonyOptimizer.optimize()
+#antColonyOptimizer.optimize_parallel()

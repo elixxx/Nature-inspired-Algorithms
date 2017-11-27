@@ -1,6 +1,8 @@
 import hippie.interfaces as interfaces
 import numpy as np
 
+from joblib import Parallel, delayed
+import multiprocessing
 
 class AntColonyOptimizer(interfaces.BaseOptimizer):
 
@@ -23,6 +25,24 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
         np.set_printoptions(threshold=np.nan)
 
         print(np.matrix(pheromones))
+
+    def get_ant_cost(self, ant, pheromones):
+        return ant.find_path(pheromones)
+
+    def optimize_parallel(self):
+
+        num_cores = multiprocessing.cpu_count()
+        while not self._convergence_criterion.converged(self._ants, self._pheromones):
+
+            self._ants = Parallel(n_jobs=num_cores)(delayed(self.get_ant_cost)(i, self._pheromones) for i in self._ants)
+
+            self._pheromones = self._evaporator.evaporate(self._pheromones)
+
+            self._pheromones = self._intensifier.intensify(self._ants, self._pheromones)
+
+            #self.plot_pheromones(self._pheromones)
+
+        return min(self._ants, key=lambda x: x.cost)
 
     def optimize(self):
 
