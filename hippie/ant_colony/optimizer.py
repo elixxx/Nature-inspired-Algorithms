@@ -15,6 +15,7 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
         self._convergence_criterion = convergence_criterion
         self.n_history = 9
         self.pheromone_history = np.dstack([initializer.initialize()] * self.n_history)
+        self._optimize_val = None
 
     def plot_pheromones(self, pheromones):
         np.set_printoptions(threshold=np.nan)
@@ -40,8 +41,8 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
 
             # print("Iteration step {} of {}, lowest cost {}".format(iteration, self._convergence_criterion._n_max_iterations, min(self._ants, key=attrgetter('cost'))))
 
-
-        return min(self._ants, key=attrgetter('cost'))
+        self._optimize_val = min(self._ants, key=attrgetter('cost'))
+        return  self._optimize_val
 
     def __str__(self):
         return f'Optimizer with {len(self._ants)} ants.'
@@ -54,4 +55,5 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
         return {'n_ants': len(self._ants),
                 'evaporator': self._evaporator.parameters,
                 'intensifier': self._intensifier.parameters,
-                'convergence_criterion': self._convergence_criterion.parameters}
+                'convergence_criterion': self._convergence_criterion.parameters,
+                'optimize_val': self._optimize_val}
