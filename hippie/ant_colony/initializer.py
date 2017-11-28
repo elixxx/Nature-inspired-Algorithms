@@ -14,3 +14,15 @@ class ZeroInitializer(interfaces.BaseStrategy):
 
     def __str__(self):
         return 'ZeroInitializer'
+
+class RandomInitializer(interfaces.BaseStrategy):
+    def initialize(self, dim):
+        return np.random.rand(dim, dim)
+        #return np.zeros(shape=(dim, dim))
+
+    @property
+    def parameters(self):
+        return {}
+
+    def __str__(self):
+        return 'RandomInitializer'

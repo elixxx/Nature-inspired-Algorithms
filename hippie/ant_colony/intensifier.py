@@ -11,7 +11,7 @@ class BestIntensifier(interfaces.BaseStrategy):
 
         best_ant = min(ants, key=lambda x: x.cost)
 
-        print("The best ant has a path cost of {} in comparison to the mean of {}".format(best_ant.cost, np.mean([x.cost for x in ants])))
+        #print("The best ant has a path cost of {} in comparison to the mean of {}".format(best_ant.cost, np.mean([x.cost for x in ants])))
 
         for i in range(len(best_ant.path) - 1):
             row = best_ant.path[i]

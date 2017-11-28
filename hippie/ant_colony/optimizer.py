@@ -1,5 +1,6 @@
 import hippie.interfaces as interfaces
 import numpy as np
+import sys
 
 from joblib import Parallel, delayed
 import multiprocessing
@@ -44,9 +45,11 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
 
         return min(self._ants, key=lambda x: x.cost)
 
+    @property
     def optimize(self):
-
+        iterations = 0
         while not self._convergence_criterion.converged(self._ants, self._pheromones):
+            iterations += 1
             for ant in self._ants:
                 #ant.find_path()
                 ant.find_path(self._pheromones) #Ants need the recent pheromone trails to generate their path
@@ -55,7 +58,7 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
 
             self._pheromones = self._intensifier.intensify(self._ants, self._pheromones)
 
-            #self.plot_pheromones(self._pheromones)
+            print("Iteration step {} of {}, lowest cost {}".format(iterations, self._convergence_criterion._n_max_iterations, min(self._ants, key=lambda x: x.cost)))
 
         return min(self._ants, key=lambda x: x.cost)
 
