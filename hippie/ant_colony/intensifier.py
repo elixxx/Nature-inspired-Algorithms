@@ -13,12 +13,12 @@ class BestIntensifier(interfaces.BaseStrategy):
 
         #print("The best ant has a path cost of {} in comparison to the mean of {}".format(best_ant.cost, np.mean([x.cost for x in ants])))
 
-        for i in range(len(best_ant.path) - 1):
-            row = best_ant.path[i]
-            col = best_ant.path[i + 1]
+        for i in range(len(best_ant) - 1):
+            row = best_ant[i]
+            col = best_ant[i + 1]
             pheromones[row, col] += self._pheromone_increase
 
-        pheromones[best_ant.path[-1], best_ant[0]] += self._pheromone_increase
+        pheromones[best_ant[-1], best_ant[0]] += self._pheromone_increase
 
         return pheromones
 
