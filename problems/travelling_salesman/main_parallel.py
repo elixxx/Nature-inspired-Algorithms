@@ -26,7 +26,7 @@ def flatten(d, parent_key='', sep='.'):
 
 distance_matrix = parse_to_matrix("problems/travelling_salesman/data/1.tsp")
 optimizer = list()
-iterations =100
+iterations = 100
 for i in range(0, 50):
     n_ants = np.random.randint(10, 100)
     rand_rate = np.random.uniform(0, 1)
@@ -60,7 +60,7 @@ for i in tqdm(range(len(optimizer))):
     num = res._number_left
     while num == res._number_left and not res.ready():
         time.sleep(1)
-
+res.wait()
 frame = pd.DataFrame()
 for opt in optimizer:
     fl = flatten(opt.parameters)
