@@ -24,7 +24,7 @@ def flatten(d, parent_key='', sep='.'):
     return dict(items)
 
 
-distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/1.tsp")
+distance_matrix = parse_to_matrix("problems/travelling_salesman/data/1.tsp")
 optimizer = list()
 iterations =100
 for i in range(0, 50):
