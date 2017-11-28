@@ -13,6 +13,8 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
         self._evaporator = evaporator
         self._intensifier = intensifier
         self._convergence_criterion = convergence_criterion
+        self.n_history = 9
+        self.pheromone_history = np.dstack([initializer.initialize()] * self.n_history)
 
     def plot_pheromones(self, pheromones):
         np.set_printoptions(threshold=np.nan)
@@ -20,24 +22,33 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
         # print(np.matrix(pheromones))
 
     def optimize(self):
-        iterations = 0
+        iteration = 0
+        step = np.floor(self._convergence_criterion.parameters['n_max_iterations'] / self.n_history)
+        self.history_iter = [0]
         while not self._convergence_criterion.converged(self._ants, self._pheromones):
-            iterations += 1
+            iteration += 1
             for ant in self._ants:
                 ant.find_path(self._pheromones) #Ants need the recent pheromone trails to generate their path
 
             self._pheromones = self._evaporator.evaporate(self._pheromones)
 
             self._pheromones = self._intensifier.intensify(self._ants, self._pheromones)
-            # print(iterations, self._pheromones)
-            # print(self._pheromones.max())
-            print("Iteration step {} of {}, lowest cost {}".format(iterations, self._convergence_criterion._n_max_iterations, min(self._ants, key=attrgetter('cost'))))
+
+            if ((iteration % step) == 0):
+                self.pheromone_history[..., len(self.history_iter) - 1] = self._pheromones
+                self.history_iter.append(iteration)
+
+            print("Iteration step {} of {}, lowest cost {}".format(iteration, self._convergence_criterion._n_max_iterations, min(self._ants, key=attrgetter('cost'))))
+
 
         return min(self._ants, key=attrgetter('cost'))
 
     def __str__(self):
         return f'Optimizer with {len(self._ants)} ants.'
-    
+
+    def history(self):
+        return self.pheromone_history, self.history_iter
+
     @property
     def parameters(self):
         return {'n_ants': len(self._ants),
