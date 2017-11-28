@@ -42,4 +42,3 @@ class CreepMutation(BaseGAMutation):
     @property
     def parameters(self):
         return {'pb': self.pb, 'encoding_range': self._encoding_range}
-

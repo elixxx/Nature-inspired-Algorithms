@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 import hippie.interfaces as interfaces
 import numpy as np
 
@@ -17,7 +19,7 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
     def plot_pheromones(self, pheromones):
         np.set_printoptions(threshold=np.nan)
 
-        print(np.matrix(pheromones))
+        # print(np.matrix(pheromones))
 
     def optimize(self):
         iteration = 0
@@ -31,15 +33,15 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
             self._pheromones = self._evaporator.evaporate(self._pheromones)
 
             self._pheromones = self._intensifier.intensify(self._ants, self._pheromones)
-            print(iteration, self._pheromones)
-            print(self._pheromones.max())
-            print("Iteration step {} of {}, lowest cost {}".format(iteration, self._convergence_criterion._n_max_iterations, min(self._ants, key=lambda x: x.cost)))
 
             if ((iteration % step) == 0):
                 self.pheromone_history[..., len(self.history_iter) - 1] = self._pheromones
                 self.history_iter.append(iteration)
 
-        return min(self._ants, key=lambda x: x.cost)
+            print("Iteration step {} of {}, lowest cost {}".format(iteration, self._convergence_criterion._n_max_iterations, min(self._ants, key=attrgetter('cost'))))
+
+
+        return min(self._ants, key=attrgetter('cost'))
 
     def __str__(self):
         return f'Optimizer with {len(self._ants)} ants.'
