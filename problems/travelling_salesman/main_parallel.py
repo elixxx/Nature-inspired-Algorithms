@@ -24,10 +24,10 @@ def flatten(d, parent_key='', sep='.'):
     return dict(items)
 
 
-distance_matrix = parse_to_matrix("problems/travelling_salesman/data/1.tsp")
+distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/1.tsp")
 optimizer = list()
-iterations = 100
-for i in range(0, 50):
+iterations = 2
+for i in range(0, 3):
     n_ants = np.random.randint(10, 100)
     rand_rate = np.random.uniform(0, 1)
     rand_pheromone_increase = np.random.uniform(0, 20)
@@ -36,7 +36,7 @@ for i in range(0, 50):
     initializer = ConstantInitializer(distance_matrix.shape[0], 1)
 
     evaporator = Evaporator(rate=rand_rate)
-    intensifier = BestIntensifier(pheromone_increase=5)
+    intensifier = BestIntensifier(pheromone_increase=rand_pheromone_increase)
     convergence_criterion = MaxIteration(iterations)
     ants = [HeuristicTSPAnt.generate_random_candidate(distance_matrix, pathfinding_alpha=1, pathfinding_beta=1)
             for _ in range(n_ants)]

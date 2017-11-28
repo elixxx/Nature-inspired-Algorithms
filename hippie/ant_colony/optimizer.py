@@ -42,7 +42,7 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
             # print("Iteration step {} of {}, lowest cost {}".format(iteration, self._convergence_criterion._n_max_iterations, min(self._ants, key=attrgetter('cost'))))
 
         self._optimize_val = min(self._ants, key=attrgetter('cost'))
-        return  self._optimize_val
+        return self._optimize_val
 
     def __str__(self):
         return f'Optimizer with {len(self._ants)} ants.'
