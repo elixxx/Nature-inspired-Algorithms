@@ -41,6 +41,6 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
     @property
     def parameters(self):
         return {'n_ants': len(self._ants),
-                'evaporator': str(self._evaporator),
-                'intensifier': str(self._intensifier),
-                'convergence_criterion': str(self._convergence_criterion)}
+                'evaporator': self._evaporator.parameters,
+                'intensifier': self._intensifier.parameters,
+                'convergence_criterion': self._convergence_criterion.parameters}
