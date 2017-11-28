@@ -26,8 +26,8 @@ def flatten(d, parent_key='', sep='.'):
 
 distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/1.tsp")
 optimizer = list()
-iterations = 100
-for i in range(0, 4):
+iterations =100
+for i in range(0, 50):
     n_ants = np.random.randint(10, 100)
     rand_rate = np.random.uniform(0, 1)
     rand_pheromone_increase = np.random.uniform(0, 20)
@@ -55,12 +55,12 @@ def call_optimize(x):
 
 p = Pool(len(os.sched_getaffinity(0)))
 res = p.map_async(call_optimize,optimizer)
-# for i in range
-print(res)
-while not res.ready():
-    # frame = frame.append(f.get(), ignore_index=True)
-    print(f'{res._number_left}/{len(optimizer)}')
-    time.sleep(1)
+
+for i in tqdm(range(len(optimizer))):
+    num = res._number_left
+    while num == res._number_left and not res.ready():
+        time.sleep(1)
+
 frame = pd.DataFrame()
 for opt in optimizer:
     fl = flatten(opt.parameters)
