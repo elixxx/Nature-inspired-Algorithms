@@ -34,7 +34,11 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
         return min(self._ants, key=lambda x: x.cost)
 
     def __str__(self):
-        return str("{} ants with alpha {} and beta {}".format(len(self._ants), self._pathfinding_alpha, self._pathfinding_beta))
-
+        return f'Optimizer with {len(self._ants)} ants.'
+    
+    @property
     def parameters(self):
-        pass
+        return {'n_ants': len(self._ants),
+                'evaporator': str(self._evaporator),
+                'intensifier': str(self._intensifier),
+                'convergence_criterion': str(self._convergence_criterion)}

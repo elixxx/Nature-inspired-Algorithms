@@ -10,3 +10,6 @@ class MaxIteration:
             return True
         else:
             self._iterations += 1
+
+    def __str__(self):
+        return f'{self.__class__.__name__} with {self._n_max_iterations} iterations'
