@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 import hippie.interfaces as interfaces
 import numpy as np
 
@@ -9,7 +11,7 @@ class BestIntensifier(interfaces.BaseStrategy):
 
     def intensify(self, ants, pheromones):
 
-        best_ant = min(ants, key=lambda x: x.cost)
+        best_ant = min(ants, key=attrgetter('cost'))
 
         #print("The best ant has a path cost of {} in comparison to the mean of {}".format(best_ant.cost, np.mean([x.cost for x in ants])))
 

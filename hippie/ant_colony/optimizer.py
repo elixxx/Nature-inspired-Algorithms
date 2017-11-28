@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 import hippie.interfaces as interfaces
 import numpy as np
 
@@ -15,7 +17,7 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
     def plot_pheromones(self, pheromones):
         np.set_printoptions(threshold=np.nan)
 
-        print(np.matrix(pheromones))
+        # print(np.matrix(pheromones))
 
     def optimize(self):
         iterations = 0
@@ -27,11 +29,11 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
             self._pheromones = self._evaporator.evaporate(self._pheromones)
 
             self._pheromones = self._intensifier.intensify(self._ants, self._pheromones)
-            print(iterations, self._pheromones)
-            print(self._pheromones.max())
-            print("Iteration step {} of {}, lowest cost {}".format(iterations, self._convergence_criterion._n_max_iterations, min(self._ants, key=lambda x: x.cost)))
+            # print(iterations, self._pheromones)
+            # print(self._pheromones.max())
+            print("Iteration step {} of {}, lowest cost {}".format(iterations, self._convergence_criterion._n_max_iterations, min(self._ants, key=attrgetter('cost'))))
 
-        return min(self._ants, key=lambda x: x.cost)
+        return min(self._ants, key=attrgetter('cost'))
 
     def __str__(self):
         return str("{} ants with alpha {} and beta {}".format(len(self._ants), self._pathfinding_alpha, self._pathfinding_beta))
