@@ -30,10 +30,10 @@ distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/"+pro
 optimizer = list()
 
 ns_ants = [10,50]
-evaporation_rates = [0.5, 0.7]
-rand_pheromone_increases = [0.5]
-iterations = 1
-number_experiments = 10
+evaporation_rates = [0.1, 0.2, 0.5]
+rand_pheromone_increases = [0.5, 5]
+iterations = 120
+number_experiments = 2
 pathfinding_alphas = [0, 1]
 pathfinding_betas = [0, 1]
 for rand_pheromone_increase in rand_pheromone_increases:
