@@ -52,7 +52,7 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
 
     @property
     def optimze_value(self):
-        return self._optimize_val.cost
+        return self._optimize_val
 
     @property
     def parameters(self):

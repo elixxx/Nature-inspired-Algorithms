@@ -32,7 +32,7 @@ optimizer = list()
 ns_ants = [10,50]
 evaporation_rates = [0.5, 0.7]
 rand_pheromone_increases = [0.5]
-iterations = 70
+iterations = 1
 number_experiments = 10
 pathfinding_alphas = [0, 1]
 pathfinding_betas = [0, 1]
@@ -90,7 +90,8 @@ for idx, opt in enumerate(optimizer):
     fl = flatten(opt.parameters)
     fl["experiment_id"] = idx
     fl["problem"] = problem
-    fl["optimize_value"] = opt.optimze_value
+    fl["optimize_value_cost"] = opt.optimze_value.cost
+    fl["optimize_value_path"] = opt.optimze_value.path
     fl["optimizer_instance"] = opt
     frame = frame.append(pd.DataFrame([fl], columns=fl.keys()))
 frame.to_pickle(str(datetime.now().timestamp())+"out.pkl")
