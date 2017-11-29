@@ -69,8 +69,8 @@ def call_optimize(x):
         print(x.parameters)
     return ret
 
-# p = Pool(len(os.sched_getaffinity(0)))
-p =Pool(1)
+p = Pool(len(os.sched_getaffinity(0)))
+# p =Pool(1)
 res = p.map_async(call_optimize,optimizer)
 number_of_experiments = len(optimizer)
 print(f'{number_of_experiments} on {len(os.sched_getaffinity(0))} cores')
