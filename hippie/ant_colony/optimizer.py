@@ -36,7 +36,7 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
             self._pheromones = self._intensifier.intensify(self._ants, self._pheromones)
 
             if ((iteration % step) == 0):
-                self.pheromone_history.append(self._pheromones)
+                self.pheromone_history[..., len(self.history_iter) - 1] = self._pheromones
                 self.history_iter.append(iteration)
 
             # print("Iteration step {} of {}, lowest cost {}".format(iteration, self._convergence_criterion._n_max_iterations, min(self._ants, key=attrgetter('cost'))))
