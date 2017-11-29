@@ -29,10 +29,10 @@ problem = "1.tsp"
 distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/"+problem)
 optimizer = list()
 
-ns_ants = [10]
+ns_ants = [10,50]
 evaporation_rates = [0.5, 0.7]
 rand_pheromone_increases = [0.5]
-iterations = 1
+iterations = 70
 number_experiments = 10
 pathfinding_alphas = [0, 1]
 pathfinding_betas = [0, 1]
@@ -78,13 +78,12 @@ for opt in optimizer:
 
 number_of_experiments = len(optimizer)
 print(f'{number_of_experiments} on {len(os.sched_getaffinity(0))} cores')
+optimizer = list()
 for f in tqdm(optimized):
-    frame = frame.append(f.get(), ignore_index=True)
+    optimizer.append(f.get())
 
 p.close()
 p.join()
-
-optimizer = res.get()
 
 frame = pd.DataFrame()
 for idx, opt in enumerate(optimizer):
