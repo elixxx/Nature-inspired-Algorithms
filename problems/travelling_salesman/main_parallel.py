@@ -29,22 +29,24 @@ problem = "1.tsp"
 distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/"+problem)
 optimizer = list()
 
-ns_ants = [50, 100]
-rand_rates = [0.5, 0.7]
-rand_pheromone_increases = [5, 10, 20]
-iterations = 100
+ns_ants = [10]
+evaporation_rates = [0.5, 0.7]
+rand_pheromone_increases = [0.5]
+iterations = 50
 number_experiments = 10
 pathfinding_alphas = [0, 1]
 pathfinding_betas = [0, 1]
 for rand_pheromone_increase in rand_pheromone_increases:
-    for rand_rate in rand_rates:
+    for evaporation_rate in evaporation_rates:
         for n_ants in ns_ants:
             for i in range(number_experiments):
                 for pathfinding_alpha in pathfinding_alphas:
                     for pathfinding_beta  in pathfinding_betas:
+                        if pathfinding_beta ==0 and pathfinding_alpha==0:
+                            continue
                         initializer = ConstantInitializer(distance_matrix.shape[0], 1)
 
-                        evaporator = Evaporator(rate=rand_rate)
+                        evaporator = Evaporator(rate=evaporation_rate)
                         intensifier = BestIntensifier(pheromone_increase=rand_pheromone_increase)
                         convergence_criterion = MaxIteration(iterations)
                         ants = [LogicalTSPAnt.generate_random_candidate(distance_matrix,
