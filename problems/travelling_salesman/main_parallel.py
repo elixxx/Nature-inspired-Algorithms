@@ -32,7 +32,7 @@ optimizer = list()
 ns_ants = [10]
 evaporation_rates = [0.5, 0.7]
 rand_pheromone_increases = [0.5]
-iterations = 50
+iterations = 1
 number_experiments = 10
 pathfinding_alphas = [0, 1]
 pathfinding_betas = [0, 1]
@@ -71,15 +71,18 @@ def call_optimize(x):
 
 p = Pool(len(os.sched_getaffinity(0)))
 # p =Pool(1)
-res = p.map_async(call_optimize,optimizer)
+# res = p.map_async(call_optimize,optimizer)
+optimized = list()
+for opt in optimizer:
+    optimized.append(p.apply_async(opt.optimize))
+
 number_of_experiments = len(optimizer)
 print(f'{number_of_experiments} on {len(os.sched_getaffinity(0))} cores')
-for i in tqdm(range(number_of_experiments)):
-    num = res._number_left
-    while num == res._number_left and not res.ready():
-        time.sleep(1)
-res.wait()
+for f in tqdm(optimized):
+    frame = frame.append(f.get(), ignore_index=True)
+
 p.close()
+p.join()
 
 optimizer = res.get()
 
