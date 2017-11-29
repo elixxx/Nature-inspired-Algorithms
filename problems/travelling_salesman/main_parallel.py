@@ -29,11 +29,11 @@ problem = "1.tsp"
 distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/"+problem)
 optimizer = list()
 
-ns_ants = [10, 20]
+ns_ants = [50, 100]
 rand_rates = [0.5, 0.7]
 rand_pheromone_increases = [5, 10, 20]
-iterations = 2
-number_experiments = 1
+iterations = 100
+number_experiments = 10
 pathfinding_alphas = [0, 1]
 pathfinding_betas = [0, 1]
 for rand_pheromone_increase in rand_pheromone_increases:
