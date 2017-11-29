@@ -64,7 +64,7 @@ def call_optimize(x):
 p = Pool(len(os.sched_getaffinity(0)))
 res = p.map_async(call_optimize,optimizer)
 number_of_experiments = len(optimizer)
-
+print(f'{number_of_experiments} on {len(s.sched_getaffinity())} cores')
 for i in tqdm(range(number_of_experiments)):
     num = res._number_left
     while num == res._number_left and not res.ready():
