@@ -1,4 +1,6 @@
 import time
+
+from datetime import date, datetime
 from tqdm import tqdm
 import pandas as pd
 from hippie.ant_colony.initializer import *
@@ -26,25 +28,34 @@ def flatten(d, parent_key='', sep='.'):
 problem = "1.tsp"
 distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/"+problem)
 optimizer = list()
-iterations = 2
-for i in range(0, 3):
-    n_ants = np.random.randint(10, 100)
-    rand_rate = np.random.uniform(0, 1)
-    rand_pheromone_increase = np.random.uniform(0, 20)
 
+ns_ants = [10, 20]
+rand_rates = [0.5, 0.7]
+rand_pheromone_increases = [5, 10, 20]
+iterations = 100
+number_experiments = 3
+pathfinding_alphas = [0, 1]
+pathfinding_betas = [0, 1]
+for rand_pheromone_increase in rand_pheromone_increases:
+    for rand_rate in rand_rates:
+        for n_ants in ns_ants:
+            for i in range(number_experiments):
+                for pathfinding_alpha in pathfinding_alphas:
+                    for pathfinding_beta  in pathfinding_betas:
+                        initializer = ConstantInitializer(distance_matrix.shape[0], 1)
 
-    initializer = ConstantInitializer(distance_matrix.shape[0], 1)
-
-    evaporator = Evaporator(rate=rand_rate)
-    intensifier = BestIntensifier(pheromone_increase=rand_pheromone_increase)
-    convergence_criterion = MaxIteration(iterations)
-    ants = [HeuristicTSPAnt.generate_random_candidate(distance_matrix, pathfinding_alpha=1, pathfinding_beta=1)
-            for _ in range(n_ants)]
-    antColonyOptimizer = AntColonyOptimizer(ants=ants,
-                                            initializer=initializer, evaporator=evaporator,
-                                            intensifier=intensifier,
-                                            convergence_criterion=convergence_criterion)
-    optimizer.append(antColonyOptimizer)
+                        evaporator = Evaporator(rate=rand_rate)
+                        intensifier = BestIntensifier(pheromone_increase=rand_pheromone_increase)
+                        convergence_criterion = MaxIteration(iterations)
+                        ants = [HeuristicTSPAnt.generate_random_candidate(distance_matrix,
+                                                                          pathfinding_alpha=pathfinding_alpha,
+                                                                          pathfinding_beta=pathfinding_beta)
+                                for _ in range(n_ants)]
+                        antColonyOptimizer = AntColonyOptimizer(ants=ants,
+                                                                initializer=initializer, evaporator=evaporator,
+                                                                intensifier=intensifier,
+                                                                convergence_criterion=convergence_criterion)
+                        optimizer.append(antColonyOptimizer)
 
 
 def call_optimize(x):
@@ -64,9 +75,11 @@ p.close()
 optimizer = res.get()
 
 frame = pd.DataFrame()
-for opt in optimizer:
+for idx, opt in enumerate(optimizer):
     fl = flatten(opt.parameters)
+    fl["experiment_id"] = idx
     fl["problem"] = problem
     fl["optimize_value"] = opt.optimze_value
+    fl["optimizer_instance"] = opt
     frame = frame.append(pd.DataFrame([fl], columns=fl.keys()))
-frame.to_pickle("out.pkl")
+frame.to_pickle(str(datetime.now().timestamp())+"out.pkl")
