@@ -20,9 +20,6 @@ class TSPAnt(BaseCandidate):
         self.inverse_distance_matrix = 1 / self.distance_matrix
         self.inverse_distance_matrix[np.isinf(self.inverse_distance_matrix)] = 0
 
-
-        pass
-
     def __str__(self):
         return f'TSPAnt with cost={self.cost}'
 
@@ -103,3 +100,30 @@ class HeuristicTSPAnt(TSPAnt):
 
     def pathfinding_heuristic(self, current_city):
         return self.inverse_distance_matrix[current_city]
+
+class LogicalTSPAnt(TSPAnt):
+    def select_next_city(self, current_city, unvisited_cities, pheromones):
+
+        next_pheromones = np.zeros(self.len_path)
+
+        for i in unvisited_cities:
+            next_pheromones[i] = pheromones[current_city][i]
+
+        if sum(next_pheromones) == 0:
+            #If all the pheromones are 0, only use the heuristic for a choice:
+            tau_current_i_pow_alpha = next_pheromones
+            tau_current_i_pow_alpha[unvisited_cities] = 1
+        else:
+            tau_current_i_pow_alpha = next_pheromones
+
+
+        eta_current_i_pow_beta = self.pathfinding_heuristic(current_city) ** self.pathfinding_beta
+
+        tau_eta_array = tau_current_i_pow_alpha * eta_current_i_pow_beta
+
+        # Probabilites to visit the next possible cities from the current city.
+        # Only not 0 for unvisited cities. Sums up to 1
+        next_probs = tau_eta_array / np.nansum(tau_eta_array)
+
+        selected = np.random.choice(self._all_cities, p=next_probs)
+        return selected

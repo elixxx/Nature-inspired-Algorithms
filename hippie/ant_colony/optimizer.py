@@ -24,7 +24,7 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
 
     def optimize(self):
         iteration = 0
-        step = np.floor(self._convergence_criterion.parameters['n_max_iterations'] / self.n_history)
+        step = np.ceil(self._convergence_criterion.parameters['n_max_iterations'] / self.n_history)
         self.history_iter = [0]
         while not self._convergence_criterion.converged(self._ants, self._pheromones):
             iteration += 1

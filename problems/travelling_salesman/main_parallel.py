@@ -9,7 +9,7 @@ from hippie.ant_colony.intensifier import *
 from hippie.ant_colony.optimizer import *
 
 from hippie.ant_colony.convergence import *
-from problems.travelling_salesman.tsp_candidate import TSPAnt, HeuristicTSPAnt
+from problems.travelling_salesman.tsp_candidate import TSPAnt, HeuristicTSPAnt, LogicalTSPAnt
 
 from hippie.parser.parser import *
 from multiprocessing import Pool
@@ -32,8 +32,8 @@ optimizer = list()
 ns_ants = [10, 20]
 rand_rates = [0.5, 0.7]
 rand_pheromone_increases = [5, 10, 20]
-iterations = 100
-number_experiments = 50
+iterations = 2
+number_experiments = 1
 pathfinding_alphas = [0, 1]
 pathfinding_betas = [0, 1]
 for rand_pheromone_increase in rand_pheromone_increases:
@@ -47,7 +47,7 @@ for rand_pheromone_increase in rand_pheromone_increases:
                         evaporator = Evaporator(rate=rand_rate)
                         intensifier = BestIntensifier(pheromone_increase=rand_pheromone_increase)
                         convergence_criterion = MaxIteration(iterations)
-                        ants = [HeuristicTSPAnt.generate_random_candidate(distance_matrix,
+                        ants = [LogicalTSPAnt.generate_random_candidate(distance_matrix,
                                                                           pathfinding_alpha=pathfinding_alpha,
                                                                           pathfinding_beta=pathfinding_beta)
                                 for _ in range(n_ants)]
@@ -59,12 +59,19 @@ for rand_pheromone_increase in rand_pheromone_increases:
 
 
 def call_optimize(x):
-    return x.optimize()
+    ret = None
+    try:
+        ret = x.optimize()
+    except Exception as e:
+        print(e)
+        print(x.parameters)
+    return ret
 
-p = Pool(len(os.sched_getaffinity(0)))
+# p = Pool(len(os.sched_getaffinity(0)))
+p =Pool(1)
 res = p.map_async(call_optimize,optimizer)
 number_of_experiments = len(optimizer)
-print(f'{number_of_experiments} on {len(s.sched_getaffinity())} cores')
+print(f'{number_of_experiments} on {len(os.sched_getaffinity(0))} cores')
 for i in tqdm(range(number_of_experiments)):
     num = res._number_left
     while num == res._number_left and not res.ready():
