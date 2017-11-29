@@ -33,7 +33,7 @@ ns_ants = [10, 20]
 rand_rates = [0.5, 0.7]
 rand_pheromone_increases = [5, 10, 20]
 iterations = 100
-number_experiments = 3
+number_experiments = 50
 pathfinding_alphas = [0, 1]
 pathfinding_betas = [0, 1]
 for rand_pheromone_increase in rand_pheromone_increases:
