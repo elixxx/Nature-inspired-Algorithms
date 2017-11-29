@@ -23,8 +23,8 @@ def flatten(d, parent_key='', sep='.'):
             items.append((new_key, v))
     return dict(items)
 
-
-distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/1.tsp")
+problem = "1.tsp"
+distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/"+problem)
 optimizer = list()
 iterations = 2
 for i in range(0, 3):
@@ -45,27 +45,28 @@ for i in range(0, 3):
                                             intensifier=intensifier,
                                             convergence_criterion=convergence_criterion)
     optimizer.append(antColonyOptimizer)
-    # print("Found result of path cost {} for {} ants, {} iterations, evaporator_rate={} and increase_rate={}".format(optimal_run_result.cost, n_ants, iterations, rand_rate, rand_pheromone_increase ))
 
-# e = Experiment.Worker(optimizer)
-# e.start(0,20)
-# e.get()
+
 def call_optimize(x):
     return x.optimize()
 
 p = Pool(len(os.sched_getaffinity(0)))
 res = p.map_async(call_optimize,optimizer)
+number_of_experiments = len(optimizer)
 
-for i in tqdm(range(len(optimizer))):
+for i in tqdm(range(number_of_experiments)):
     num = res._number_left
     while num == res._number_left and not res.ready():
         time.sleep(1)
 res.wait()
+p.close()
+
+optimizer = res.get()
+
 frame = pd.DataFrame()
 for opt in optimizer:
     fl = flatten(opt.parameters)
+    fl["problem"] = problem
+    fl["optimize_value"] = opt.optimze_value
     frame = frame.append(pd.DataFrame([fl], columns=fl.keys()))
 frame.to_pickle("out.pkl")
-# antColonyOptimizer = AntColonyOptimizer(TSPAnt, distance_matrix=distance_matrix, n_ants=n_ants, initializer=initializer, evaporator=evaporator, intensifier=intensifier, convergence_criterion = convergence_criterion)
-# antColonyOptimizer.optimize
-#antColonyOptimizer.optimize_parallel()

@@ -42,7 +42,7 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
             # print("Iteration step {} of {}, lowest cost {}".format(iteration, self._convergence_criterion._n_max_iterations, min(self._ants, key=attrgetter('cost'))))
 
         self._optimize_val = min(self._ants, key=attrgetter('cost'))
-        return self._optimize_val
+        return self
 
     def __str__(self):
         return f'Optimizer with {len(self._ants)} ants.'
@@ -51,9 +51,12 @@ class AntColonyOptimizer(interfaces.BaseOptimizer):
         return self.pheromone_history, self.history_iter
 
     @property
+    def optimze_value(self):
+        return self._optimize_val.cost
+
+    @property
     def parameters(self):
         return {'n_ants': len(self._ants),
                 'evaporator': self._evaporator.parameters,
                 'intensifier': self._intensifier.parameters,
-                'convergence_criterion': self._convergence_criterion.parameters,
-                'optimize_val': self._optimize_val}
+                'convergence_criterion': self._convergence_criterion.parameters}
