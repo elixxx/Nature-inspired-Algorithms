@@ -1,6 +1,4 @@
-import time
-
-from datetime import date, datetime
+from datetime import datetime
 from tqdm import tqdm
 import pandas as pd
 from hippie.ant_colony.initializer import *
@@ -9,9 +7,9 @@ from hippie.ant_colony.intensifier import *
 from hippie.ant_colony.optimizer import *
 
 from hippie.ant_colony.convergence import *
-from problems.travelling_salesman.tsp_candidate import TSPAnt, HeuristicTSPAnt, LogicalTSPAnt
+from problems.travelling_salesman.tsp_candidate import LogicalTSPAnt
 
-from hippie.parser.parser import *
+from problems.travelling_salesman.parser import *
 from multiprocessing import Pool
 import os
 import collections

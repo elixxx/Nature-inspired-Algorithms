@@ -4,16 +4,18 @@ from hippie.ant_colony.intensifier import *
 from hippie.ant_colony.optimizer import *
 
 from hippie.ant_colony.convergence import *
-from problems.travelling_salesman.tsp_candidate import TSPAnt, HeuristicTSPAnt
+from problems.travelling_salesman.tsp_candidate import HeuristicTSPAnt
 
-from hippie.parser.parser import *
+from problems.travelling_salesman.parser import *
+import datetime
 
+start = datetime.datetime.now()
 distance_matrix = parse_to_matrix("../../problems/travelling_salesman/data/1.tsp")
 
 n_ants = 50
 evaporation_rate = 0.3
 pheromone_increase = 0.5
-iterations = 200
+iterations = 10
 
 initializer = ConstantInitializer(distance_matrix.shape[0], 1)
 
@@ -30,7 +32,8 @@ antColonyOptimizer = AntColonyOptimizer(ants=ants,
                                         convergence_criterion=convergence_criterion)
 optimal_run_result = antColonyOptimizer.optimize()
 
-
+diff = datetime.datetime.now()-start
+print(diff)
 
 # for i in range(0, 100):
 #     n_ants = np.random.randint(10, 120)
