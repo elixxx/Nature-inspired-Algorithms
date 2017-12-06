@@ -6,10 +6,12 @@ import numpy as np
 
 class AntColonyOptimizer(interfaces.BaseOptimizer):
 
-    def __init__(self, ants, initializer, evaporator, intensifier,
-                 convergence_criterion):
+    def __init__(self, n_ants, initializer, evaporator, intensifier,
+                 convergence_criterion,
+                 ant_type,
+                 ant_gen_parms):
         self._pheromones = initializer.initialize()
-        self._ants = ants
+        self._ants = [ant_type.generate_random_candidate(**ant_gen_parms) for i in range(n_ants)]
         self._evaporator = evaporator
         self._intensifier = intensifier
         self._convergence_criterion = convergence_criterion

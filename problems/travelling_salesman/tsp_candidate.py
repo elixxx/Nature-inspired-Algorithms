@@ -24,9 +24,9 @@ class TSPAnt(BaseCandidate):
         return f'TSPAnt with cost={self.cost}'
 
     @classmethod
-    def generate_random_candidate(cls, distance_matrix, pathfinding_alpha=1, pathfinding_beta=0):
+    def generate_random_candidate(cls,**kwargs):
 
-        return cls(distance_matrix, pathfinding_alpha, pathfinding_beta)
+        return cls(kwargs['distance_matrix'], kwargs['pathfinding_alpha'], kwargs['pathfinding_beta'])
 
     def find_path(self, pheromones):
         """Construct solution."""
