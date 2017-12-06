@@ -1,4 +1,5 @@
-import pandas as pd
+# import pandas as pd
+import pickle
 from multiprocessing import Pool, Lock
 import os, time, tqdm
 from .generator import ExperimentGenerator
@@ -33,8 +34,9 @@ class Worker():
         self._finished += 1
         self._lock.release()
         self._tqdm.update(1)
-        frame = pd.DataFrame(a)
-        frame.to_pickle(str(self._experiment_id) + "-" + str(my_finischid) + ".pkl")
+        pickle.dump(a,open(str(self._experiment_id) + "-" + str(my_finischid) + ".pkl","wb"))
+        # frame = pd.DataFrame(a)
+        # frame.to_pickle()
 
     def wait(self):
         self._pool.close()

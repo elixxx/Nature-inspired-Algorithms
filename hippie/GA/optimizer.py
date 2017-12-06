@@ -34,7 +34,7 @@ class Optimizer(interfaces.BaseOptimizer):
                 return last_frame
 
             # results = results.append(frame, ignore_index=True)
-        return last_frame
+        return self
 
     def __str__(self):
         return "GAOptimizer"
