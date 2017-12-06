@@ -1,6 +1,6 @@
 from copy import deepcopy
 import hippie.interfaces as interfaces
-
+import collections
 
 class ExperimentGenerator:
     """
@@ -49,7 +49,7 @@ class ExperimentGenerator:
                 sub_partial_experiment = partial_experiment.copy()
                 sub_partial_experiment[name] = op
                 yield from self._recursive_recombine(not_parse.copy(), sub_partial_experiment)
-        else:
+        elif isinstance(entry,collections.Iterable):
             for e in entry:
                 if isinstance(e, dict):
                     ops = self._recursive_recombine(e.copy())
@@ -61,6 +61,10 @@ class ExperimentGenerator:
                     sub_partial_experiment = partial_experiment.copy()
                     sub_partial_experiment[name] = e
                     yield from self._recursive_recombine(not_parse.copy(), sub_partial_experiment)
+        else:
+            print("Entry have to be dict or iterable!")
+            print(entry)
+            raise ValueError
 
     def __len__(self):
         return len(self._experiments)
