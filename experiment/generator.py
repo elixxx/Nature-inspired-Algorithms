@@ -61,6 +61,7 @@ class ExperimentGenerator:
                     sub_partial_experiment = partial_experiment.copy()
                     sub_partial_experiment[name] = e
                     yield from self._recursive_recombine(not_parse.copy(), sub_partial_experiment)
+
     def __len__(self):
         return len(self._experiments)
 
