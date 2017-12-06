@@ -11,7 +11,7 @@ class BaseCandidate(metaclass=typing.abc.ABCMeta):
         pass
 
     @typing.abc.abstractclassmethod
-    def generate_random_candidate(cls):
+    def generate_random_candidate(cls, **kwargs):
         pass
 
 

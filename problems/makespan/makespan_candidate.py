@@ -31,26 +31,26 @@ class Makespan(BaseGACandidate):
         return divs/len(self._solution)
 
     @classmethod
-    def generate_random_candidate(cls, conf):
-        if(conf == "Bench1"):
+    def generate_random_candidate(cls, **kwargs):
+        if(kwargs['conf'] == "Bench1"):
             # 6000 for benchmark problem 1
             m = 20
             jobs = [random.randint(10,1000) for i in range(200)]
             jobs += [random.randint(100,300) for i in range(100)]
             return cls(m,jobTimes=np.array(jobs))
-        elif(conf=="Bench2"):
+        elif(kwargs['conf']=="Bench2"):
             # 8000 for benchmark problem 2.
             m = 20
             jobs = [random.randint(10,1000) for i in range(150)]
             jobs += [random.randint(400,700) for i in range(150)]
             return cls(m, jobTimes=np.array(jobs))
-        elif(conf=="Bench3"):
+        elif(kwargs['conf']=="Bench3"):
             m = 50
             jobs = [50 for i in range(3)]
             jobs += [i for i in range(51, 100)]
             jobs += [i for i in range(51, 100)]
             return cls(m, jobTimes=np.array(jobs))
-        elif(conf=="test"):
+        elif(kwargs['conf']=="test"):
             m = 8
             jobs = [random.randint(1,100) for i in range(10)]
             return cls(m, jobTimes=np.array(jobs))

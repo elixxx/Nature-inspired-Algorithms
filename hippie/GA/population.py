@@ -14,7 +14,7 @@ class Population():
         self._crossover = crossover
         self._selection = selection
         # self._candidate_generator = fnc_candidate_generator
-        self._population = [candidate_type.generate_random_candidate(candidate_gen_parms) for i in range(size)]
+        self._population = [candidate_type.generate_random_candidate(**candidate_gen_parms) for i in range(size)]
         self._diversity = None
         self._candidate_gen_parms = candidate_gen_parms
 

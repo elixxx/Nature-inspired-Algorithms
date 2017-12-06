@@ -12,13 +12,13 @@ experiments_parms = {
                   'pb': [0.2, 0.5]},
     'mutation': {'type': [GA.mutation.CreepMutation],
                  'pb': [0.2],
-                 'encoding_range': [Makespan.generate_random_candidate("Bench1")._m]},
+                 'encoding_range': [Makespan.generate_random_candidate(conf="Bench1")._m]},
     'selection': [GA.selection.RouletteWheel(), {'type': [GA.selection.Tournament],
                                                          'tournement_size': [20],
                                                          'best_win_pb': [0.4]
                                                          }],
     'candidate_type': [Makespan],
-    'candidate_gen_parms': ["Bench1"]
+    'candidate_gen_parms': {'type':[dict], 'conf': ["Bench1"]}
 }
 experiments = ExperimentGenerator(GA.Optimizer, experiments_parms)
 arbeiter = Worker(experiments)
