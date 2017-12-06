@@ -6,8 +6,8 @@ from .generator import ExperimentGenerator
 
 class Worker():
     """
-    Execute Experiments of Experiment generator in a multiprocessed manner.
-    Also only the num_worker_prcoess * 2 will be instanstiate to save memmory
+    Execute Experiments of ExperimentGenerator in a multiprocessed manner.
+    Also only the num_worker_process * 2 will be instantiate to save memory
     """
     def __init__(self, generator: ExperimentGenerator,
                  num_worker=None,
@@ -25,9 +25,9 @@ class Worker():
         if experiment_id is None:
             experiment_id = time.time()
 
-        self._log_path = path_log
-        os.makedirs(path_log, exist_ok=True)
         self._experiment_id = experiment_id
+        self._log_path = os.path.join(path_log,str(self._experiment_id))
+        os.makedirs(self._log_path, exist_ok=True)
         self._generator_object = generator
 
         self._pool = Pool(num_worker)
@@ -41,8 +41,8 @@ class Worker():
     def start(self, start_idx=0, stop_idx=-1):
         """
         Execute all Experiments between start_idx and stop_idx, by default anyone is executed.
-        Function will return after any experiment is submited, this is not immediately and also not after all executions.
-        Pls use Worker.wait() before the end of your programm!
+        Function will return after any experiment is submitted, this is not immediately and also not after all executions.
+        You should use Worker.wait() before the end of your program!
         :param start_idx: start index for execution
         :param stop_idx: stop index for execution
         :return:
@@ -59,8 +59,8 @@ class Worker():
 
     def _callback(self, a):
         """
-        Callback which is invoked after an Experiment is done
-        :param a: result of the Experiment (return of Optimizer.optimze())
+        Callback which is invoked after an Experiment is done.
+        :param a: result of the Experiment (return of Optimizer.optimize())
         :return:
         """
         self._lock.acquire()
@@ -70,13 +70,13 @@ class Worker():
         self._lock.release()
         self._tqdm.update(1)
         pickle.dump(a,open(os.path.join(self._log_path,
-                                        str(self._experiment_id) + "-" + str(my_finish_id) + ".pkl"),
+                                        str(my_finish_id) + ".pkl"),
                            "wb"))
         self._semaphore.release()
 
     def wait(self):
         """
-        Should called before your process end zo ensure any open Process/Execution is ended.
+        Should called before your process end to ensure any open Process/Execution is ended.
         Block until Pool is finished!
         :return:
         """
