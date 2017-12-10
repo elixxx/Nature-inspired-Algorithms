@@ -40,6 +40,8 @@ class Profitmodel(BaseCandidate):
         random_market_price = np.array(
             [np.random.random(1)[0] * kwargs['markets'][i].max_price for i in range(len(kwargs['markets']))])
         random_vector = np.concatenate((random_energy_produced, random_planned_energy, random_market_price), axis=0)
+        #random_vector = np.concatenate((random_energy_produced, random_market_price), axis=0)
+
 
         new_candidate = cls.generate_candidate(**kwargs, vector=random_vector)
 

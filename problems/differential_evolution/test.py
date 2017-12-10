@@ -10,8 +10,9 @@ market2 = MarketType(max_price=0.25, max_demand=30000000)
 candidate1 = Profitmodel([plant1, plant2], [market1, market2])
 
 print(candidate1.get_profit([10000, 1200000], [10000, 10000], [0.3, 0.2]))
-candidate1.set_vector([10000, 1200000, 10000, 10000, 0.3, 0.2])
+candidate1.set_vector([0, 3000000, 0, 3000000, 0.3, 0.2])
 print(candidate1)
+print(candidate1.profit)
 
 
 new_cand = Profitmodel.generate_random_candidate(plants = [plant1, plant2], markets = [market1, market2])
