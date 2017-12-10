@@ -18,3 +18,11 @@ class MarketType():
         demand = self._max_demand - price**2 * self._max_demand / self._max_price**2
 
         return demand
+
+    @property
+    def max_price(self):
+        return self._max_price
+
+    @property
+    def max_demand(self):
+        return self._max_demand

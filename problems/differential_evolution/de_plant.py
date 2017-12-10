@@ -14,16 +14,20 @@ class PlantType():
         self._max_number_of_plants = max_number_of_plants
         self._large_value = math.inf
 
-    def cost(self, x):
+    def cost(self, planned_energy):
         #if x is non-positive, return 0
-        if x <= 0:
+        if planned_energy <= 0:
             return 0
 
         #if x i greater than hat can be generated return prohibitively large value
-        if x > (self._kwh_per_plant * self._max_number_of_plants):
+        if planned_energy > (self._kwh_per_plant * self._max_number_of_plants):
             return self._large_value
 
         #otherwise determine number of plants needed to generate x
-        plants_needed = math.ceil(x / self._kwh_per_plant)
+        plants_needed = math.ceil(planned_energy / self._kwh_per_plant)
 
         return plants_needed * self._cost_per_plant
+
+    @property
+    def max_planned_energy(self):
+        return self._kwh_per_plant * self._max_number_of_plants
