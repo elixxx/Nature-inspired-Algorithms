@@ -13,11 +13,15 @@ random.seed(3)
 
 plant1 = PlantType(kwh_per_plant=50000, cost_per_plant=10000, max_number_of_plants=100)
 plant2 = PlantType(kwh_per_plant=600000, cost_per_plant=80000, max_number_of_plants=50)
+plant3 = PlantType(kwh_per_plant=4000000, cost_per_plant=400000, max_number_of_plants=3)
 market1 = MarketType(max_price=0.45, max_demand=2000000)
 market2 = MarketType(max_price=0.25, max_demand=30000000)
+market3 = MarketType(max_price=0.2, max_demand=20000000)
 n_pop = 10
 # plants, markets,
-de = DifferentialEvolutionOptimizer([Profitmodel.generate_random_candidate(plants = [plant1, plant2], markets = [market1, market2]) for i in range(n_pop) ],
+de = DifferentialEvolutionOptimizer([Profitmodel.generate_random_candidate(plants = [plant1, plant2, plant3],
+                                                                           markets = [market1, market2, market3])
+                                     for i in range(n_pop) ],
                                     DifferentialMutation(scaling_factor=0.5),
                                     Crossover(crossover_rate=0.2),
                                     Selection(),
