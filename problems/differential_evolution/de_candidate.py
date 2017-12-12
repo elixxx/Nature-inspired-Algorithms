@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from hippie.interfaces import BaseCandidate
 
 
@@ -53,7 +54,11 @@ class Candidate():
     def get_profit(self, energy_produced, planned_energy, market_price):
         revenue = 0
         for market_price_i, planned_energy_i, market_i in zip(market_price, planned_energy, self._markets):
+            if planned_energy_i < 0 and market_price_i < 0:
+                return -math.inf
             revenue += min(market_i.demand(market_price_i), planned_energy_i) * market_price_i
+            #print(f'new delta rev {min(market_i.demand(market_price_i), planned_energy_i) * market_price_i}')
+            #print(f'new rev {revenue}')
 
         production_cost = 0
         for energy_produced_i, plant_i in zip(energy_produced, self._plants):

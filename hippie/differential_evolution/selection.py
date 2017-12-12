@@ -8,6 +8,9 @@ class Selection(interfaces.BaseStrategy):
         new_population = []
 
         for target, trial in zip(population, trial_candidates):
+            #print(f'target profit is {target.profit}, trial profit is {trial.profit}')
+            if trial.profit > 80000000:
+                print(f'trial vector is {trial.vector}')
             if target.profit >= trial.profit:
                 new_population.append(target)
             else:
