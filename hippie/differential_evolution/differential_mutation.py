@@ -10,9 +10,9 @@ class DifferentialMutation(interfaces.BaseStrategy):
 
 
     def mutate(self, target, population):
-
+        target_index = population.index(target)
         population_copy = copy.deepcopy(population)
-        population_copy.remove(target)
+        del(population_copy[target_index])
         base = np.random.choice(population_copy)
         population_copy.remove(base)
         x1 = np.random.choice(population_copy)

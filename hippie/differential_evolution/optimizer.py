@@ -16,13 +16,13 @@ class DifferentialEvolutionOptimizer(interfaces.BaseOptimizer):
 
         while not self._convergence_criterion.converged(self):
 
-            trials = []
+            trial_candidates = []
             for target in self._population:
                 donor_vector = self._differential_mutation.mutate(target, self._population)
                 trial_vector = self._crossover.crossover(target.vector, donor_vector)
-                trials.append(trial_vector)
+                trial_candidates.append(self._candidate.generate_candidate(vector=trial_vector, plants=target._plants,
+                                                                           markets=target._markets))
 
-            trial_candidates = [self.candidate.generate_candidate(trial) for trial in trials]
             self._population = self._selection.select(self._population, trial_candidates)
 
         return self
