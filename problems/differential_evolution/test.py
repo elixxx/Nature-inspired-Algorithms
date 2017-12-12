@@ -16,7 +16,7 @@ candidate.set_vector([0, 3000000, 0, 3000000, 0.3, 0.2])
 print(candidate)
 print(candidate.profit)
 
-
-new_cand = problem.generate_random_candidate()
-print(new_cand)
+new_cand = problem.generate_candidate([ -1.13187108e+08,  -8.75878341e+07,  6.60959790e+07 , -2.34632409e+09,
+  -2.49376695e+00  ,-1.78563718e+01])
+print(new_cand.vector)
 print(new_cand.profit)
