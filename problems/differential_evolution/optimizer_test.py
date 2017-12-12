@@ -11,9 +11,9 @@ from problems.differential_evolution.problem import *
 
 
 population_size = 100
-number_of_iterations = 400
+number_of_iterations = 1000
 crossover_rate = 0.6
-scaling_factor = 0.9
+scaling_factor = 0.6        # 0.6; 0.3; 0.1
 
 convergence = MaxIteration(number_of_iterations)
 crossover = Crossover(crossover_rate)
