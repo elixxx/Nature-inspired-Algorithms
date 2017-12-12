@@ -14,7 +14,6 @@ class BaseCandidate(metaclass=typing.abc.ABCMeta):
     def generate_random_candidate(cls, **kwargs):
         pass
 
-
 class BaseOptimizer(metaclass=typing.abc.ABCMeta):
     @typing.abc.abstractmethod
     def optimize(self):
