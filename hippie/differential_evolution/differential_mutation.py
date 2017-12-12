@@ -8,7 +8,6 @@ class DifferentialMutation(interfaces.BaseStrategy):
     def __init__(self, scaling_factor = 0.5):
         self._scaling_factor = scaling_factor
 
-
     def mutate(self, target, population):
         target_index = population.index(target)
         population_copy = copy.deepcopy(population)

@@ -4,13 +4,13 @@ import numpy as np
 
 class DifferentialEvolutionOptimizer(interfaces.BaseOptimizer):
 
-    def __init__(self, population, differential_mutation, crossover, selection, candidate, convergence_criterion ):
+    def __init__(self, population, differential_mutation, crossover, selection, problem, convergence_criterion ):
         self._population = population
         self._convergence_criterion = convergence_criterion
         self._differential_mutation = differential_mutation
         self._crossover = crossover
         self._selection = selection
-        self._candidate = candidate
+        self._problem = problem
 
     def optimize(self):
 
@@ -20,10 +20,11 @@ class DifferentialEvolutionOptimizer(interfaces.BaseOptimizer):
             for target in self._population:
                 donor_vector = self._differential_mutation.mutate(target, self._population)
                 trial_vector = self._crossover.crossover(target.vector, donor_vector)
-                trial_candidates.append(self._candidate.generate_candidate(vector=trial_vector, plants=target._plants,
-                                                                           markets=target._markets))
+                trial_candidates.append(self._problem.generate_candidate(vector=trial_vector))
 
             self._population = self._selection.select(self._population, trial_candidates)
+
+            print(f'Max Profit of Iteration is {max([current_candidate.profit for current_candidate in self._population ])}')
 
         return self
 
