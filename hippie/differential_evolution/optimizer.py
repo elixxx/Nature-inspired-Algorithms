@@ -14,7 +14,7 @@ class DifferentialEvolutionOptimizer(interfaces.BaseOptimizer):
         self._history = list()
 
     def optimize(self):
-
+        i = 0
         while not self._convergence_criterion.converged(self):
 
             trial_candidates = []
@@ -25,8 +25,9 @@ class DifferentialEvolutionOptimizer(interfaces.BaseOptimizer):
 
             self._population = self._selection.select(self._population, trial_candidates)
 
-            # print(f'Max Profit of Iteration is {max([current_candidate.profit for current_candidate in self._population ])}')
+            print(f'Max Profit of iteration {i} is {max([current_candidate.profit for current_candidate in self._population ])}')
             self._history.append(max([current_candidate.profit for current_candidate in self._population ]))
+            i += 1
         return self
 
     def __str__(self):
