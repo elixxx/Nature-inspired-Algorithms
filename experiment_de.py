@@ -20,6 +20,7 @@ market2 = MarketType(max_price=0.25, max_demand=30000000)
 market3 = MarketType(max_price=0.2, max_demand=20000000)
 
 n_pop = 100
+n_experiments = 30
 problem1 = Problem([plant1, plant2, plant3], [market1, market2, market3])
 # print(problem1.generate_list_of_random_candidates(n_pop))
 
@@ -34,10 +35,11 @@ experiments_parms = {
     'selection': [Selection()],
     'convergence_criterion': {'type':[MaxIteration], 'n_max_iterations': [1200]},
 }
-experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
-arbeiter = Worker(experiments)
-arbeiter.start()
-arbeiter.wait()
+for i in range(n_experiments):
+    experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
+    arbeiter = Worker(experiments)
+    arbeiter.start()
+    arbeiter.wait()
 # time.sleep(1000)
 # for i in experiments.experiment_instances():
 #     # pprint(i)
