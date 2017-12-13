@@ -1,6 +1,7 @@
 import random
 import time
 import tqdm
+import copy
 from hippie.differential_evolution.optimizer import DifferentialEvolutionOptimizer
 from hippie.differential_evolution.differential_mutation import DifferentialMutation
 from hippie.differential_evolution.crossover import Crossover
@@ -25,18 +26,32 @@ n_experiments = 30
 problem1 = Problem([plant1, plant2, plant3], [market1, market2, market3])
 # print(problem1.generate_list_of_random_candidates(n_pop))
 
-experiments_parms = {
-    'population': {'type':[problem1.generate_list_of_random_candidates],
-                   'number_of_candidates': [n_pop]},
-    'problem': [problem1],
-    'crossover': {'type': [Crossover],
-                  'crossover_rate': [0.6, 0.5, 0.7]},
-    'differential_mutation': {'type': [DifferentialMutation],
-                 'scaling_factor': [0.6, 0.5, 0.7]},
-    'selection': [Selection()],
-    'convergence_criterion': {'type':[MaxIteration], 'n_max_iterations': [1200]},
-}
+# experiments_parms = {
+#     'population': {'type':[problem1.generate_list_of_random_candidates],
+#                    'number_of_candidates': [n_pop]},
+#     'problem': [problem1],
+#     'crossover': {'type': [Crossover],
+#                   'crossover_rate': [0.6, 0.5, 0.7]},
+#     'differential_mutation': {'type': [DifferentialMutation],
+#                  'scaling_factor': [0.6, 0.5, 0.7]},
+#     'selection': [Selection()],
+#     'convergence_criterion': {'type':[MaxIteration], 'n_max_iterations': [1200]},
+# }
 for i in tqdm.tqdm(range(n_experiments)):
+    experiments_parms = {
+        'population': {'type': [copy.deepcopy(problem1.generate_list_of_random_candidates)],
+                       'number_of_candidates': [n_pop]
+                       },
+        'problem': [problem1],
+        'crossover': {'type': [Crossover],
+                      'crossover_rate': [0.6, 0.5, 0.7]
+                      },
+        'differential_mutation': {'type': [DifferentialMutation],
+                                  'scaling_factor': [0.6, 0.5, 0.7]
+                                  },
+        'selection': [Selection()],
+        'convergence_criterion': {'type': [MaxIteration], 'n_max_iterations': [1]},
+    }
     experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
     arbeiter = Worker(experiments)
     arbeiter.start()
