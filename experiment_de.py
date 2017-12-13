@@ -1,5 +1,6 @@
 import random
 import time
+import tqdm
 from hippie.differential_evolution.optimizer import DifferentialEvolutionOptimizer
 from hippie.differential_evolution.differential_mutation import DifferentialMutation
 from hippie.differential_evolution.crossover import Crossover
@@ -35,7 +36,7 @@ experiments_parms = {
     'selection': [Selection()],
     'convergence_criterion': {'type':[MaxIteration], 'n_max_iterations': [1200]},
 }
-for i in range(n_experiments):
+for i in tqdm.tqdm(range(n_experiments)):
     experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
     arbeiter = Worker(experiments)
     arbeiter.start()
