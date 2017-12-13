@@ -55,9 +55,9 @@ class Worker():
             if start_idx <= i <= stop_idx:
                 self._semaphore.acquire()
                 opti = self._generator_object.experiment_class(**experiment)
-                self._pool.apply_async(opti.optimize,callback=self._callback)
+                self._pool.apply_async(opti.optimize,callback=self._callback_success, error_callback=self._callback_fail)
 
-    def _callback(self, a):
+    def _callback_success(self, a):
         """
         Callback which is invoked after an Experiment is done.
         :param a: result of the Experiment (return of Optimizer.optimize())
@@ -73,6 +73,10 @@ class Worker():
                                         str(my_finish_id) + ".pkl"),
                            "wb"))
         self._semaphore.release()
+
+    def _callback_fail(self, a):
+        print(a)
+        print("Faild")
 
     def wait(self):
         """
