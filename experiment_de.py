@@ -28,11 +28,11 @@ experiments_parms = {
                    'number_of_candidates': [n_pop]},
     'problem': [problem1],
     'crossover': {'type': [Crossover],
-                  'crossover_rate': [0.2, 0.5]},
+                  'crossover_rate': [0.6, 0.5, 0.7]},
     'differential_mutation': {'type': [DifferentialMutation],
-                 'scaling_factor': [0.5]},
+                 'scaling_factor': [0.6, 0.5, 0.7]},
     'selection': [Selection()],
-    'convergence_criterion': {'type':[MaxIteration], 'n_max_iterations': [2]},
+    'convergence_criterion': {'type':[MaxIteration], 'n_max_iterations': [1200]},
 }
 experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
 arbeiter = Worker(experiments)
