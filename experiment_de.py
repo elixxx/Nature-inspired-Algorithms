@@ -25,8 +25,8 @@ n_pop = 100
 n_experiments = 30
 problem1 = Problem([plant1, plant2, plant3], [market1, market2, market3])
 
-for i in tqdm.tqdm(range(n_experiments)):
-    experiments_parms = {
+# for i in tqdm.tqdm(range(n_experiments)):
+experiments_parms = {
         'population': {'type': [copy.deepcopy(problem1.generate_list_of_random_candidates)],
                        'number_of_candidates': [n_pop]
                        },
@@ -38,9 +38,9 @@ for i in tqdm.tqdm(range(n_experiments)):
                                   'scaling_factor': [0.6, 0.5, 0.7]
                                   },
         'selection': [Selection()],
-        'convergence_criterion': {'type': [MaxIteration], 'n_max_iterations': [1200]},
+        'convergence_criterion': {'type': [MaxIteration], 'n_max_iterations': [1]},
     }
-    experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
-    arbeiter = Worker(experiments)
-    arbeiter.start()
-    arbeiter.wait()
+experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
+arbeiter = Worker(experiments)
+arbeiter.start()
+arbeiter.wait()
