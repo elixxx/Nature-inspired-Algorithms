@@ -36,7 +36,7 @@ class DifferentialEvolutionOptimizer(interfaces.BaseOptimizer):
         return {'population size': len(self._population),
                 'differential mutation': self._differential_mutation.parameters,
                 'crossover': self._crossover.parameters,
-                'selection': self._selection.paramaters,
+                'selection': self._selection.parameters,
                 'convergence_criterion': self._convergence_criterion.parameters}
 
 
