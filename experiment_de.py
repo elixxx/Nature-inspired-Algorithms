@@ -22,7 +22,7 @@ market2 = MarketType(max_price=0.25, max_demand=30000000)
 market3 = MarketType(max_price=0.2, max_demand=20000000)
 
 n_pop = 100
-n_experiments = 30
+n_experiments = 10
 problem1 = Problem([plant1, plant2, plant3], [market1, market2, market3])
 
 # for i in tqdm.tqdm(range(n_experiments)):
@@ -32,15 +32,15 @@ experiments_parms = {
                        },
         'problem': [problem1],
         'crossover': {'type': [Crossover],
-                      'crossover_rate': [0.6, 0.5, 0.7]
+                      'crossover_rate': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
                       },
         'differential_mutation': {'type': [DifferentialMutation],
-                                  'scaling_factor': [0.6, 0.5, 0.7]
+                                  'scaling_factor': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
                                   },
         'selection': [Selection()],
         'convergence_criterion': {'type': [MaxIteration], 'n_max_iterations': [1200]},
     }
-experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
-arbeiter = Worker(experiments)
+experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms, num_experiments=n_experiments)
+arbeiter = Worker(experiments, path_log="logDE1/")
 arbeiter.start()
 arbeiter.wait()

@@ -32,16 +32,16 @@ experiments_parms = {
                        },
         'problem': [problem1],
         'crossover': {'type': [Crossover],
-                      'crossover_rate': [0.6, 0.5, 0.7]
+                      'crossover_rate': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
                       },
         'differential_mutation': {'type': [DifferentialMutation],
-                                  'scaling_factor': [0.6, 0.5, 0.7]
+                                  'scaling_factor': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
                                   },
         'selection': [Selection()],
         'convergence_criterion': {'type': [MaxIteration], 'n_max_iterations': [1200]},
     }
 experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms,
                                   num_experiments=n_experiments)
-arbeiter = Worker(experiments, path_log="log3/")
+arbeiter = Worker(experiments, path_log="logDE3/")
 arbeiter.start()
 arbeiter.wait()
