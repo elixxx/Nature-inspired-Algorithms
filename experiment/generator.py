@@ -21,7 +21,7 @@ class ExperimentGenerator:
     'candidate_gen_parms': ["Bench1"]
 }
     """
-    def __init__(self, optimizer_type: interfaces.BaseOptimizer, experiment_dict: dict):
+    def __init__(self, optimizer_type: interfaces.BaseOptimizer, experiment_dict: dict, num_experiments=1):
         """
 
         :param self:
@@ -29,6 +29,7 @@ class ExperimentGenerator:
         :param experiment_dict: dict which have a list for each parameter of optimizer_type with len() bigger 1
         :return:
         """
+        self._num_experiments = num_experiments
         self._optimizer_type = optimizer_type
         self._experiment_dict = experiment_dict
         self._experiments = list(self._recursive_recombine(not_parse=self._experiment_dict))
@@ -67,23 +68,24 @@ class ExperimentGenerator:
             raise ValueError
 
     def __len__(self):
-        return len(self._experiments)
+        return len(self._experiments) * self._num_experiments
 
     def experiment_instances(self):
         """
         Generater function to get a instance of each Experiment. Parameter class are created jsut in time to save memory
         :return: generator to a optimizer instance
         """
-        for experiment in self._experiments.copy():
-            # print(experiment)
-            to_yield = {}
-            for key, value in deepcopy(experiment).items():
-                if isinstance(value, dict):
-                    parm_type = value.pop('type')
-                    to_yield[key] = parm_type(**value)
-                else:
-                    to_yield[key] = value
-            yield to_yield
+        for i in range(self._num_experiments):
+            for experiment in self._experiments.copy():
+                # print(experiment)
+                to_yield = {}
+                for key, value in deepcopy(experiment).items():
+                    if isinstance(value, dict):
+                        parm_type = value.pop('type')
+                        to_yield[key] = parm_type(**value)
+                    else:
+                        to_yield[key] = value
+                yield to_yield
 
     @property
     def experiment_class(self)-> interfaces.BaseOptimizer:

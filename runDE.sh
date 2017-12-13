@@ -1,7 +1,3 @@
 #!/bin/bash
-for i in `seq 1 30`;
-do
-    echo $i
-    PYTHONPATH=./ python experiment_de.py
-    echo "DONE"
-done
+PYTHONPATH=./ python experiment_de_problem2.py
+PYTHONPATH=./ python experiment_de_problem3.py

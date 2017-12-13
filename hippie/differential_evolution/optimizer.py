@@ -26,7 +26,7 @@ class DifferentialEvolutionOptimizer(interfaces.BaseOptimizer):
             self._population = self._selection.select(self._population, trial_candidates)
 
             # print(f'Max Profit of Iteration is {max([current_candidate.profit for current_candidate in self._population ])}')
-            self._history.append(max([current_candidate.profit for current_candidate in self._population ]))
+            # self._history.append(max([current_candidate.profit for current_candidate in self._population ]))
         return self
 
     def __str__(self):
