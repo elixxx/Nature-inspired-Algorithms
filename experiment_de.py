@@ -12,7 +12,7 @@ from problems.differential_evolution.de_market import MarketType
 from problems.differential_evolution.de_plant import PlantType
 from experiment.generator import ExperimentGenerator
 from experiment.worker import Worker
-random.seed(3)
+# random.seed(3)
 
 plant1 = PlantType(kwh_per_plant=50000, cost_per_plant=10000, max_number_of_plants=100)
 plant2 = PlantType(kwh_per_plant=600000, cost_per_plant=80000, max_number_of_plants=50)
