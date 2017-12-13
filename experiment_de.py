@@ -38,7 +38,7 @@ experiments_parms = {
                                   'scaling_factor': [0.6, 0.5, 0.7]
                                   },
         'selection': [Selection()],
-        'convergence_criterion': {'type': [MaxIteration], 'n_max_iterations': [1]},
+        'convergence_criterion': {'type': [MaxIteration], 'n_max_iterations': [1200]},
     }
 experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
 arbeiter = Worker(experiments)
