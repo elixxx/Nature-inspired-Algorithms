@@ -21,7 +21,10 @@ class Worker():
         :param path_log: path for saving the pickled results of Optimizer.optimize() default: log/
         """
         if num_worker is None:
-            num_worker = len(os.sched_getaffinity(0))
+            if 'sched_getaffinity' in dir(os):
+                num_worker = len(os.sched_getaffinity(0))
+            else:
+                num_worker = self._get_sched_aff_taskset()
         if experiment_id is None:
             experiment_id = time.time()
 
@@ -86,3 +89,9 @@ class Worker():
         """
         self._pool.close()
         self._pool.join()
+
+    def _get_sched_aff_taskset(self):
+        import subprocess
+        a = subprocess.run(["taskset", f'-p', str(os.getpid())], stdout=subprocess.PIPE).stdout.decode('utf-8').split(': ')[1]
+        b = bin(int(a, 16))
+        return sum([1 if a=='1' else 0 for a in b])
