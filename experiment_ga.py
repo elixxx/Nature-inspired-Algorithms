@@ -20,7 +20,7 @@ experiments_parms = {
     'candidate_type': [Makespan],
     'candidate_gen_parms': {'type':[dict], 'conf': ["Bench1"]}
 }
-experiments = ExperimentGenerator(GA.Optimizer, experiments_parms)
+experiments = ExperimentGenerator(GA.Optimizer, experiments_parms, num_experiments=2)
 arbeiter = Worker(experiments)
 arbeiter.start()
 arbeiter.wait()

@@ -27,6 +27,7 @@ class Worker():
                 num_worker = self._get_sched_aff_taskset()
         if experiment_id is None:
             experiment_id = time.time()
+        print("num_worker: " + str(num_worker))
 
         self._experiment_id = experiment_id
         self._log_path = os.path.join(path_log,str(self._experiment_id))
