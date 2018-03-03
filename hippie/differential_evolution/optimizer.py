@@ -11,6 +11,7 @@ class DifferentialEvolutionOptimizer(interfaces.BaseOptimizer):
         self._crossover = crossover
         self._selection = selection
         self._problem = problem
+        self._history = list()
 
     def optimize(self):
 
@@ -24,8 +25,8 @@ class DifferentialEvolutionOptimizer(interfaces.BaseOptimizer):
 
             self._population = self._selection.select(self._population, trial_candidates)
 
-            print(f'Max Profit of Iteration is {max([current_candidate.profit for current_candidate in self._population ])}')
-
+            # print(f'Max Profit of Iteration is {max([current_candidate.profit for current_candidate in self._population ])}')
+            # self._history.append(max([current_candidate.profit for current_candidate in self._population ]))
         return self
 
     def __str__(self):
@@ -36,7 +37,7 @@ class DifferentialEvolutionOptimizer(interfaces.BaseOptimizer):
         return {'population size': len(self._population),
                 'differential mutation': self._differential_mutation.parameters,
                 'crossover': self._crossover.parameters,
-                'selection': self._selection.paramaters,
+                'selection': self._selection.parameters,
                 'convergence_criterion': self._convergence_criterion.parameters}
 
 

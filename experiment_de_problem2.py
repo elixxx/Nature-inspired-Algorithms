@@ -22,8 +22,8 @@ market2 = MarketType(max_price=0.25, max_demand=30000000)
 market3 = MarketType(max_price=0.2, max_demand=20000000)
 
 n_pop = 100
-n_experiments = 30
-problem1 = Problem([plant1, plant2, plant3], [market1, market2, market3])
+n_experiments = 10
+problem1 = Problem([plant1, plant2, plant3], [market1, market2, market3], energy_purchasing_price=0.1)
 
 # for i in tqdm.tqdm(range(n_experiments)):
 experiments_parms = {
@@ -40,7 +40,7 @@ experiments_parms = {
         'selection': [Selection()],
         'convergence_criterion': {'type': [MaxIteration], 'n_max_iterations': [1200]},
     }
-experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
-arbeiter = Worker(experiments)
+experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms, num_experiments=n_experiments)
+arbeiter = Worker(experiments, path_log="log2/")
 arbeiter.start()
 arbeiter.wait()

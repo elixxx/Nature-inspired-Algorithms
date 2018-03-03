@@ -40,8 +40,7 @@ class Candidate():
 
     @property
     def cost(self):
-        self._cost = -self.profit(self._energy_produced_vector, self._planned_energy_vector, self._market_price_vector)
-        return self._cost
+        return -self.profit
 
     @property
     def profit(self):

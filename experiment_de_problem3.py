@@ -17,13 +17,13 @@ from experiment.worker import Worker
 plant1 = PlantType(kwh_per_plant=50000, cost_per_plant=10000, max_number_of_plants=100)
 plant2 = PlantType(kwh_per_plant=600000, cost_per_plant=80000, max_number_of_plants=50)
 plant3 = PlantType(kwh_per_plant=4000000, cost_per_plant=400000, max_number_of_plants=3)
-market1 = MarketType(max_price=0.45, max_demand=2000000)
-market2 = MarketType(max_price=0.25, max_demand=30000000)
-market3 = MarketType(max_price=0.2, max_demand=20000000)
+market1 = MarketType(max_price=0.5, max_demand=1000000)
+market2 = MarketType(max_price=0.3, max_demand=5000000)
+market3 = MarketType(max_price=0.1, max_demand=5000000)
 
 n_pop = 100
-n_experiments = 30
-problem1 = Problem([plant1, plant2, plant3], [market1, market2, market3])
+n_experiments = 10
+problem1 = Problem([plant1, plant2, plant3], [market1, market2, market3], energy_purchasing_price=0.6)
 
 # for i in tqdm.tqdm(range(n_experiments)):
 experiments_parms = {
@@ -40,7 +40,8 @@ experiments_parms = {
         'selection': [Selection()],
         'convergence_criterion': {'type': [MaxIteration], 'n_max_iterations': [1200]},
     }
-experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms)
-arbeiter = Worker(experiments)
+experiments = ExperimentGenerator(DifferentialEvolutionOptimizer, experiments_parms,
+                                  num_experiments=n_experiments)
+arbeiter = Worker(experiments, path_log="log3/")
 arbeiter.start()
 arbeiter.wait()
