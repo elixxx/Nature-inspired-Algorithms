@@ -2,6 +2,14 @@ import parser
 import numpy as np
 
 
+def path_length(distance_matrix, via_matrix, path, length = 0):
+    from_node = path[0]
+    for to_node in path[1:]:
+        length += distance_matrix[to_node][from_node]
+        from_node = to_node
+    return length
+
+
 def optimize_distances(distances, depth = 0):
     """Optimizes a distance matrix for depth steps or until convergence"""
     if depth == 0:
@@ -43,9 +51,11 @@ def optimize_distances(distances, depth = 0):
     return opt_dist, opt_via
 
 def print_optimization(distances, opt_distances):
+    smaller = np.sum((distances >opt_distances))
     ratios = 1-np.divide(opt_distances+0.0001, distances+0.0001) # Dirty method to avoid division by 0
     avg_ratio = np.average(ratios)
     print("The distances were optimized by an average of ~{}%".format(avg_ratio*100))
+    print("We managed to reduce path distances for {} of {} node transitions".format(smaller, distances.size))
 
 
 matrix_via1 = np.mat([[0, 10, 2], [10, 0, 3], [2, 3, 0]])
@@ -66,3 +76,5 @@ print(opt_dist)
 print(opt_via)
 
 print_optimization(matrix, opt_dist)
+
+print(path_length(opt_dist, opt_via, [0, 1, 2, 0]))
